@@ -9,8 +9,9 @@
             <li><a href="documents.html">คลังเอกสาร</a></li>
         </ul>
     </div>
-    <div class="navbar-end md:hidden">
-        <div class="dropdown dropdown-end">
+    <div class="navbar-end">
+        <!-- Dropdown สำหรับมือถือ -->
+        <div class="dropdown dropdown-end md:hidden">
             <label tabindex="0" class="btn btn-ghost">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
@@ -23,8 +24,7 @@
                 <li><button onclick="logout()" class="btn btn-ghost w-full text-left logout-btn">ออกจากระบบ</button></li>
             </ul>
         </div>
-    </div>
-    <div class="navbar-end hidden md:flex">
-        <button onclick="logout()" class="btn btn-ghost logout-btn">ออกจากระบบ</button>
+        <!-- ปุ่มออกจากระบบสำหรับเดสก์ท็อป -->
+        <button onclick="logout()" class="btn btn-ghost logout-btn hidden md:flex">ออกจากระบบ</button>
     </div>
 </nav>
