@@ -38,7 +38,6 @@
     </div>
 
     <script>
-        // โหลดเมนู
         fetch('menu.html')
             .then(response => response.text())
             .then(data => document.getElementById('menu-container').innerHTML = data)
@@ -83,15 +82,13 @@
         }
 
         async function fetchFilesFromGoogleDrive() {
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec";
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec?folderId=179ldHaHCOmsNUz7IfosswviHbp2BAEKi";
             addMessage("กำลังดึงข้อมูลจาก Google Drive...");
 
             try {
                 const response = await fetch(scriptUrl, {
-                    method: 'POST',
-                    mode: 'cors', // ระบุโหมด CORS
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" })
+                    method: 'GET', // เปลี่ยนเป็น GET
+                    mode: 'cors'
                 });
 
                 if (!response.ok) {
