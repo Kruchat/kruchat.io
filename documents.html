@@ -27,13 +27,6 @@
             margin-bottom: 0.5rem;
             color: #1f2937;
         }
-        .file-card a {
-            color: #3b82f6;
-            text-decoration: underline;
-        }
-        .file-card a:hover {
-            color: #2563eb;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -129,7 +122,7 @@
                     const fileCards = data.files.map(file => `
                         <div class="file-card">
                             <h3>${file.name}</h3>
-                            <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">ดูไฟล์</a>
+                            <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank" class="btn btn-sm btn-outline btn-primary">ดูไฟล์</a>
                         </div>
                     `).join('');
                     addMessage(`<strong>ผลการค้นหา "${searchTerm}":</strong><div class="file-card-container">${fileCards}</div>`);
