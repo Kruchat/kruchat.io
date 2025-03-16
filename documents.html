@@ -7,32 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .file-card-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-        }
-        .file-card {
-            background-color: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .file-card h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: #1f2937;
-        }
-        .file-card .button-group {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
     <div id="menu-container"></div>
@@ -56,7 +30,7 @@
             </div>
             <div class="chat-input">
                 <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ชื่อไฟล์เพื่อค้นหา...">
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered" placeholder="พิมพ์ชื่อไฟล์เพื่อค้นหา...">
                     <button onclick="processCommand()" class="btn btn-primary">ค้นหา</button>
                 </div>
             </div>
@@ -81,7 +55,7 @@
                     </div>
                 </div>
                 <div class="chat-header">
-                    ${isUser ? 'คุณ' : 'หน่วยบริการเขาวง'}
+                    ${isUser ? 'คุณ' : 'ระบบ'}
                     <time class="text-xs opacity-50">${new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</time>
                 </div>
                 <div class="chat-bubble ${isUser ? 'bg-primary text-white' : ''}">${content}</div>
