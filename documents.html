@@ -37,7 +37,11 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
+        // ตรวจสอบสถานะ login ทันทีเมื่อโหลดหน้า
+        checkLogin();
+
         fetch('menu.html')
             .then(response => response.text())
             .then(data => document.getElementById('menu-container').innerHTML = data)
