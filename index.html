@@ -3,93 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Search Interface</title>
+    <title>ระบบจัดการข้อมูล - หน้าหลัก</title>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chat-container {
-            max-width: 800px;
-            margin: 20px auto;
-            height: 80vh;
-            display: flex;
-            flex-direction: column;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        .chat-input {
-            padding: 20px;
-            border-top: 1px solid #eee;
-            background: #f9fafb;
-            border-bottom-left-radius: 15px;
-            border-bottom-right-radius: 15px;
-        }
-        .chat-bubble {
-            max-width: 100%;
-            word-wrap: break-word;
-        }
-        canvas {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 300px;
-            margin-top: 10px;
-        }
-    </style>
 </head>
 <body class="bg-gray-100">
-    <div class="chat-container">
-        <div class="chat-messages" id="chatMessages">
-            <div class="chat chat-start">
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+    <!-- เรียกใช้เมนู -->
+    <div id="menu-container"></div>
+
+    <!-- เนื้อหาหลัก -->
+    <div class="main-container">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat chat-start">
+                    <div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        </div>
                     </div>
+                    <div class="chat-header">
+                        ระบบ
+                        <time class="text-xs opacity-50">เริ่มต้น</time>
+                    </div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่หน้าหลัก!</div>
+                    <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
                 </div>
-                <div class="chat-header">
-                    ระบบ
-                    <time class="text-xs opacity-50">เริ่มต้น</time>
-                </div>
-                <div class="chat-bubble">สวัสดี! กรุณาพิมพ์ข้อมูลใดๆ เพื่อค้นหา หรือพิมพ์ "ทั้งหมด รวม กราฟ" เพื่อดูสรุปข้อมูล</div>
-                <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
             </div>
-        </div>
-        <div class="chat-input">
-            <div class="flex gap-2">
-                <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ข้อมูลใดๆ หรือ 'ทั้งหมด รวม กราฟ'...">
-                <button onclick="searchData()" class="btn btn-primary">ค้นหา</button>
+            <div class="chat-input">
+                <div class="flex gap-2">
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์คำสั่ง...">
+                    <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        const studentData = [
-            { name: "เด็กหญิงโชติกา ศรีทหาร", disability: "บุคคลออทิสติก", id: "1469000156861", gender: "หญิง", dob: "29 ต.ค. 2562", age: 5, address: "54/3 หมู่ 7 บ้านดงหมู ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายไพรัตน์ ศรีหาตา (ตา)", phone: "0917170455" },
-            { name: "เด็กชายนัทชานนท์ รุ่นแพน", disability: "บุคคลที่มีความบกพร่องทางการพูดและภาษา", id: "1469901215522", gender: "ชาย", dob: "14 พ.ย. 2563", age: 4, address: "218 หมู่ 7 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวมณีรัตน์ ศรีพิมพ์ (มารดา)", phone: "0970654355" },
-            { name: "เด็กชายธนภัทร สงรักษา", disability: "บุคคลที่มีความบกพร่องทางสติปัญญา", id: "1468900088178", gender: "ชาย", dob: "6 ส.ค. 2564", age: 3, address: "36 หมู่ 8 ต.สงเปลือย อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายชัยยา สงรักษา (บิดา)", phone: "0917301908" },
-            { name: "เด็กชายก้องภพ สวัสดิ์ดวง", disability: "บุคคลออทิสติก", id: "1468900063752", gender: "ชาย", dob: "25 พ.ค. 2555", age: 12, address: "136 หมู่ 10 ต.หนองผือ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวอรอุมา นากวน (มารดา)", phone: "0884713216" },
-            { name: "เด็กชายณัฐพล ว่องไว", disability: "บุคคลที่มีความบกพร่องทางการพูดและภาษา", id: "1469901138854", gender: "ชาย", dob: "20 พ.ย. 2560", age: 7, address: "54/2 หมู่ 1 ต.หนองผือ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางทองมี ว่องไว (ย่า)", phone: "0962166057" },
-            { name: "เด็กชายฐิติพงศ์ สุระเสียง", disability: "บุคคลที่มีความบกพร่องทางร่างกาย หรือการเคลื่อนไหว หรือสุขภาพ", id: "1469901216359", gender: "ชาย", dob: "27 พ.ย. 2563", age: 4, address: "36 หมู่ 1 บ้านดอนไม้คุ้ม ต.สงเปลือย อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวพิศสมัย ศิริเวิน (มารดา)", phone: "0986369834" },
-            { name: "เด็กชายภูมิพัฒน์ ตาลสมบูรณ์", disability: "บุคคลที่มีความบกพร่องทางร่างกาย หรือการเคลื่อนไหว หรือสุขภาพ", id: "1469000179364", gender: "ชาย", dob: "10 พ.ค. 2565", age: 2, address: "162 หมู่ 5 ต.กุดสิมคุ้มใหม่ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายกิตติพงษ์ ตาลสมบูรณ์ (บิดา)", phone: "0807622801" },
-            { name: "เด็กชายติณณ์ภพ โพธิสม", disability: "บุคคลที่มีความบกพร่องทางร่างกาย หรือการเคลื่อนไหว หรือสุขภาพ", id: "1469901160451", gender: "ชาย", dob: "6 ต.ค. 2561", age: 6, address: "209/6 ถ.อนรรฆนาค ต.กาฬสินธุ์ อ.เมืองกาฬสินธุ์ จ.กาฬสินธุ์ 46000", guardian: "นายพรชัย โพธิสม (บิดา)", phone: "098116550" },
-            { name: "เด็กชายอภิวัฒน์ นาคทิพย์วรรณ์", disability: "บุคคลที่มีความบกพร่องทางการพูดและภาษา", id: "1469000158791", gender: "ชาย", dob: "2 ม.ค. 2563", age: 5, address: "22 หมู่ 6 บ้านน้อยนาเจริญ ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวมณีรัตน์ เพ็ญธิสาร (ยาย)", phone: "0610867083" },
-            { name: "เด็กชายจิรภัทร แสงสาร", disability: "บุคคลที่มีความบกพร่องทางสติปัญญา", id: "1469901230394", gender: "ชาย", dob: "20 ก.ค. 2564", age: 3, address: "68 หมู่ 9 ต.กุดสิมคุ้มใหม่ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาววิมาน แสงสาร (ป้า)", phone: "0822954827" },
-            { name: "เด็กชายณัฎฐกิตต์ หาชื่น", disability: "บุคคลออทิสติก", id: "1469901156291", gender: "ชาย", dob: "10 ส.ค. 2561", age: 6, address: "30 หมู่ 5 ต.ภูแล่นช้าง อ.นาคู จ.กาฬสินธุ์ 46160", guardian: "นางศิริรัตน์ หาชื่น (มารดา)", phone: "" },
-            { name: "เด็กชายภุชงค์ แสนศิลป์", disability: "บุคคลที่มีความบกพร่องทางสติปัญญา", id: "1469900925836", gender: "ชาย", dob: "2 มิ.ย. 2554", age: 13, address: "110 หมู่ 6 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสุพร แสนศิลป์ (ย่า)", phone: "0645937693" },
-            { name: "เด็กชายณัฐชัย บุษมงคล", disability: "บุคคลที่มีความบกพร่องทางร่างกาย หรือการเคลื่อนไหว หรือสุขภาพ", id: "1468900079730", gender: "ชาย", dob: "22 พ.ย. 2559", age: 8, address: "ต.กุดปลาค้าว อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวประภาพร เหลือศิริ (มารดา)", phone: "0916829115" },
-            { name: "เด็กหญิงกนกพิชญ์ อารมณ์สวะ", disability: "บุคคลที่มีความบกพร่องทางสติปัญญา", id: "1468900054559", gender: "หญิง", dob: "5 มี.ค. 2553", age: 15, address: "176 หมู่ 3 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสมมะนิตร เครือสวัสดิ์ (ยาย)", phone: "0800110400" },
-            { name: "เด็กชายดนัยโชค เครือสวัสดิ์", disability: "บุคคลที่มีความบกพร่องทางร่างกาย หรือการเคลื่อนไหว หรือสุขภาพ", id: "1469000160434", gender: "ชาย", dob: "17 มี.ค. 2563", age: 4, address: "28 หมู่ 8 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวพรสวรรค์ เครือสวัสดิ์ (ยาย)", phone: "0619878430" },
-            { name: "เด็กชายปวริศ ศรีหาตา", disability: "บุคคลออทิสติก", id: "1468900085179", gender: "ชาย", dob: "15 ส.ค. 2562", age: 5, address: "410 หมู่ 13 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวมณีรัตน์ บุษมงคล (มารดา)", phone: "0923608679" },
-            { name: "เด็กชายธนวันต์ โคตรพัฒน์", disability: "บุคคลออทิสติก", id: "1469000159151", gender: "ชาย", dob: "13 ม.ค. 2563", age: 5, address: "50 หมู่ 5 บ้านทุ่งกระเดา ต.กุดปลาค้าว อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายวัชระศักดิ์ โคตรพัฒน์ (บิดา)", phone: "0980621944" },
-            { name: "เด็กชายภัทรพล สารสินธุ์", disability: "บุคคลออทิสติก", id: "1469000163999", gender: "ชาย", dob: "15 ส.ค. 2563", age: 4, address: "205 หมู่ 3 ต.กุดสิมคุ้มใหม่ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายกมลสินธุ์ สารสินธุ์ (บิดา)", phone: "0821211397" },
-            { name: "เด็กหญิงพรนภา ศรีอุ่น", disability: "บุคคลที่มีความบกพร่องทางสติปัญญา", id: "1468900059810", gender: "หญิง", dob: "20 ก.ค. 2554", age: 13, address: "43 หมู่ 5 ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นางสาวสาริกา ศรีพิมพ์ (แม่)", phone: "0821139551" },
-            { name: "เด็กหญิงฐิติรัตน์ ศรีคำพล", disability: "บุคคลออทิสติก", id: "1468900085667", gender: "หญิง", dob: "10 พ.ย. 2562", age: 5, address: "138 หมู่ 8 ต.กุดสิมคุ้มใหม่ อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายธนพน สุขขารมย์ (ลุง)", phone: "0988404786" }
-        ];
+        // โหลดเมนู
+        fetch('menu.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('menu-container').innerHTML = data);
 
         function addMessage(content, isUser = false) {
             const messagesDiv = document.getElementById('chatMessages');
@@ -114,156 +69,18 @@
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
 
-        function showSummaryWithGraph() {
-            // สรุปข้อมูล
-            const totalStudents = studentData.length;
-            const genderCount = {
-                male: studentData.filter(s => s.gender === "ชาย").length,
-                female: studentData.filter(s => s.gender === "หญิง").length
-            };
-            const disabilityCount = studentData.reduce((acc, student) => {
-                acc[student.disability] = (acc[student.disability] || 0) + 1;
-                return acc;
-            }, {});
-            const ageCount = studentData.reduce((acc, student) => {
-                acc[student.age] = (acc[student.age] || 0) + 1;
-                return acc;
-            }, {});
+        function processCommand() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!input) return;
 
-            // สร้างสรุปในรูปแบบ HTML
-            let summary = `
-                <strong>สรุปข้อมูลเด็กทั้งหมด (${totalStudents} คน)</strong><br>
-                <strong>เพศ:</strong><br>
-                - ชาย: ${genderCount.male} คน (${((genderCount.male / totalStudents) * 100).toFixed(1)}%)<br>
-                - หญิง: ${genderCount.female} คน (${((genderCount.female / totalStudents) * 100).toFixed(1)}%)<br>
-                <strong>ประเภทความพิการ:</strong><br>
-                ${Object.entries(disabilityCount).map(([disability, count]) => 
-                    `- ${disability}: ${count} คน (${((count / totalStudents) * 100).toFixed(1)}%)`).join('<br>')}<br>
-                <strong>อายุ:</strong><br>
-                ${Object.entries(ageCount).sort((a, b) => a[0] - b[0]).map(([age, count]) => 
-                    `- ${age} ปี: ${count} คน`).join('<br>')}
-            `;
-            addMessage(summary);
+            addMessage(input, true);
 
-            // กราฟประเภทความพิการ
-            const disabilityCanvasId = `disability-chart-${Date.now()}`;
-            addMessage(`<strong>กราฟประเภทความพิการ</strong><br><canvas id="${disabilityCanvasId}"></canvas>`);
-            setTimeout(() => {
-                const ctx1 = document.getElementById(disabilityCanvasId).getContext('2d');
-                new Chart(ctx1, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(disabilityCount),
-                        datasets: [{
-                            label: 'จำนวนเด็ก',
-                            data: Object.values(disabilityCount),
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: { beginAtZero: true, title: { display: true, text: 'จำนวนเด็ก (คน)' } },
-                            x: { title: { display: true, text: 'ประเภทความพิการ' } }
-                        },
-                        plugins: { legend: { display: false } }
-                    }
-                });
-            }, 100);
-
-            // กราฟเพศ
-            const genderCanvasId = `gender-chart-${Date.now()}`;
-            addMessage(`<strong>กราฟการกระจายตามเพศ</strong><br><canvas id="${genderCanvasId}"></canvas>`);
-            setTimeout(() => {
-                const ctx2 = document.getElementById(genderCanvasId).getContext('2d');
-                new Chart(ctx2, {
-                    type: 'pie',
-                    data: {
-                        labels: ['ชาย', 'หญิง'],
-                        datasets: [{
-                            data: [genderCount.male, genderCount.female],
-                            backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 99, 132, 0.6)'],
-                            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 99, 132, 1)'],
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        plugins: {
-                            legend: { position: 'top' },
-                            title: { display: true, text: 'การกระจายตามเพศ' }
-                        }
-                    }
-                });
-            }, 100);
-
-            // กราฟอายุ
-            const ageCanvasId = `age-chart-${Date.now()}`;
-            addMessage(`<strong>กราฟการกระจายตามอายุ</strong><br><canvas id="${ageCanvasId}"></canvas>`);
-            setTimeout(() => {
-                const ctx3 = document.getElementById(ageCanvasId).getContext('2d');
-                new Chart(ctx3, {
-                    type: 'bar',
-                    data: {
-                        labels: Object.keys(ageCount).sort((a, b) => a - b),
-                        datasets: [{
-                            label: 'จำนวนเด็ก',
-                            data: Object.values(ageCount).sort((a, b) => a - b),
-                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            y: { beginAtZero: true, title: { display: true, text: 'จำนวนเด็ก (คน)' } },
-                            x: { title: { display: true, text: 'อายุ (ปี)' } }
-                        },
-                        plugins: { legend: { display: false } }
-                    }
-                });
-            }, 100);
-        }
-
-        function searchData() {
-            const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!searchTerm) return;
-
-            addMessage(searchTerm, true);
-
-            if (searchTerm === "ทั้งหมด รวม กราฟ") {
-                showSummaryWithGraph();
+            if (input === "ไปที่ข้อมูลนักเรียน") {
+                window.location.href = "students.html";
+            } else if (input === "ไปที่คลังเอกสาร") {
+                window.location.href = "documents.html";
             } else {
-                const results = studentData.filter(student => 
-                    student.name.toLowerCase().includes(searchTerm) ||
-                    student.disability.toLowerCase().includes(searchTerm) ||
-                    student.id.includes(searchTerm) ||
-                    student.gender.toLowerCase().includes(searchTerm) ||
-                    student.dob.toLowerCase().includes(searchTerm) ||
-                    String(student.age).includes(searchTerm) ||
-                    student.address.toLowerCase().includes(searchTerm) ||
-                    student.guardian.toLowerCase().includes(searchTerm) ||
-                    student.phone.includes(searchTerm)
-                );
-
-                if (results.length > 0) {
-                    results.forEach(student => {
-                        const response = `
-                            <strong>ชื่อ:</strong> ${student.name}<br>
-                            <strong>ประเภทความพิการ:</strong> ${student.disability}<br>
-                            <strong>เลขบัตรประชาชน:</strong> ${student.id}<br>
-                            <strong>เพศ:</strong> ${student.gender}<br>
-                            <strong>วันเกิด:</strong> ${student.dob}<br>
-                            <strong>อายุ:</strong> ${student.age}<br>
-                            <strong>ที่อยู่:</strong> ${student.address}<br>
-                            <strong>ผู้ปกครอง:</strong> ${student.guardian}<br>
-                            <strong>เบอร์โทร:</strong> ${student.phone}
-                        `;
-                        addMessage(response);
-                    });
-                } else {
-                    addMessage("ไม่พบข้อมูลที่ค้นหา");
-                }
+                addMessage("คำสั่งไม่ถูกต้อง กรุณาลองใหม่ หรือใช้เมนูด้านบน");
             }
 
             document.getElementById('searchInput').value = '';
@@ -271,7 +88,7 @@
 
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                searchData();
+                processCommand();
             }
         });
     </script>
