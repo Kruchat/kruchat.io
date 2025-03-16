@@ -26,13 +26,13 @@
                         ระบบ
                         <time class="text-xs opacity-50">เริ่มต้น</time>
                     </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! (ยังไม่มีการดำเนินการในส่วนนี้)</div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! พิมพ์ "ค้นหาไฟล์" เพื่อดึงรายชื่อไฟล์จากโฟลเดอร์ Google Drive</div>
                     <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
                 </div>
             </div>
             <div class="chat-input">
                 <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์คำสั่ง...">
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ 'ค้นหาไฟล์'...">
                     <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
                 </div>
             </div>
@@ -73,9 +73,38 @@
             if (!input) return;
 
             addMessage(input, true);
-            addMessage("ส่วนนี้ยังไม่พร้อมใช้งาน");
+
+            if (input === "ค้นหาไฟล์") {
+                fetchFilesFromGoogleDrive();
+            } else {
+                addMessage("คำสั่งไม่ถูกต้อง กรุณาพิมพ์ 'ค้นหาไฟล์'");
+            }
 
             document.getElementById('searchInput').value = '';
+        }
+
+        function fetchFilesFromGoogleDrive() {
+            // เรียก Google Apps Script API
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec"; // แทนที่ด้วย URL ของ Google Apps Script Web App
+            addMessage("กำลังดึงข้อมูลจาก Google Drive...");
+
+            fetch(scriptUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.files && data.files.length > 0) {
+                    const fileList = data.files.map(file => `- ${file.name}`).join('<br>');
+                    addMessage(`<strong>รายชื่อไฟล์ในโฟลเดอร์:</strong><br>${fileList}`);
+                } else {
+                    addMessage("ไม่พบไฟล์ในโฟลเดอร์นี้");
+                }
+            })
+            .catch(error => {
+                addMessage("เกิดข้อผิดพลาดในการดึงข้อมูล: " + error.message);
+            });
         }
 
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
