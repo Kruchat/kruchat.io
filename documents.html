@@ -26,7 +26,7 @@
                         ระบบ
                         <time class="text-xs opacity-50">เริ่มต้น</time>
                     </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! พิมพ์ "ค้นหาไฟล์" เพื่อดึงรายชื่อไฟล์จากโฟลเดอร์ Google Drive</div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! พิมพ์ "ค้นหาไฟล์" เพื่อดึงรายชื่อไฟล์จาก Google Drive</div>
                     <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
                 </div>
             </div>
@@ -43,7 +43,8 @@
         // โหลดเมนู
         fetch('menu.html')
             .then(response => response.text())
-            .then(data => document.getElementById('menu-container').innerHTML = data);
+            .then(data => document.getElementById('menu-container').innerHTML = data)
+            .catch(error => console.error('Error loading menu:', error));
 
         function addMessage(content, isUser = false) {
             const messagesDiv = document.getElementById('chatMessages');
@@ -84,19 +85,28 @@
         }
 
         function fetchFilesFromGoogleDrive() {
-            // เรียก Google Apps Script API
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec"; // แทนที่ด้วย URL ของ Google Apps Script Web App
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec"; // แทนที่ด้วย URL ของ Web App
             addMessage("กำลังดึงข้อมูลจาก Google Drive...");
 
             fetch(scriptUrl, {
                 method: 'POST',
+                mode: 'cors', // เพิ่มการจัดการ CORS
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                if (data.files && data.files.length > 0) {
-                    const fileList = data.files.map(file => `- ${file.name}`).join('<br>');
+                if (data.error) {
+                    addMessage(`เกิดข้อผิดพลาด: ${data.error}`);
+                } else if (data.files && data.files.length > 0) {
+                    const fileList = data.files.map(file => 
+                        `- ${file.name} (<a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">ดูไฟล์</a>)`
+                    ).join('<br>');
                     addMessage(`<strong>รายชื่อไฟล์ในโฟลเดอร์:</strong><br>${fileList}`);
                 } else {
                     addMessage("ไม่พบไฟล์ในโฟลเดอร์นี้");
@@ -104,6 +114,7 @@
             })
             .catch(error => {
                 addMessage("เกิดข้อผิดพลาดในการดึงข้อมูล: " + error.message);
+                console.error('Fetch error:', error);
             });
         }
 
