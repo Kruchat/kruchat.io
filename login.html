@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - ระบบจัดการข้อมูล</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <div class="login-container">
+        <div class="card bg-white shadow-lg">
+            <div class="card-body">
+                <h2 class="card-title text-center">เข้าสู่ระบบ</h2>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">ชื่อผู้ใช้</span>
+                    </label>
+                    <input type="text" id="username" placeholder="กรอกชื่อผู้ใช้" class="input input-bordered w-full">
+                </div>
+                <div class="form-control mt-4">
+                    <label class="label">
+                        <span class="label-text">รหัสผ่าน</span>
+                    </label>
+                    <input type="password" id="password" placeholder="กรอกรหัสผ่าน" class="input input-bordered w-full">
+                </div>
+                <div class="form-control mt-6">
+                    <button onclick="login()" class="btn btn-primary w-full">เข้าสู่ระบบ</button>
+                </div>
+                <p id="error-message" class="text-error text-center mt-4 hidden">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
