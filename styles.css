@@ -159,10 +159,10 @@ canvas {
     align-items: center;
 }
 
-/* เพิ่มสไตล์ให้ปุ่มออกจากระบบเด่นขึ้น */
+/* สไตล์ปุ่มออกจากระบบ */
 .navbar-end .btn-ghost.logout-btn,
 .dropdown-content .btn-ghost.logout-btn {
-    color: #ef4444; /* สีแดงเพื่อให้เด่น */
+    color: #ef4444;
     font-weight: 500;
 }
 
