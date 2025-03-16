@@ -96,7 +96,10 @@
 
         function processCommand() {
             const input = document.getElementById('searchInput').value.trim();
-            if (!input) return;
+            if (!input) {
+                addMessage("กรุณาพิมพ์ชื่อไฟล์ที่ต้องการค้นหา", false);
+                return;
+            }
 
             addMessage(input, true);
             fetchFilesFromGoogleDrive(input);
@@ -121,7 +124,7 @@
                 const data = await response.json();
 
                 if (data.error) {
-                    addMessage(`เกิดข้อผิดพลาดจาก Google Apps Script: ${data.error}`);
+                    addMessage(`เกิดข้อผิดพลาด: ${data.error}`);
                 } else if (data.files && data.files.length > 0) {
                     const fileCards = data.files.map(file => `
                         <div class="file-card">
