@@ -10,10 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gray-100">
-    <!-- เรียกใช้เมนู -->
     <div id="menu-container"></div>
 
-    <!-- เนื้อหาหลัก -->
     <div class="main-container">
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
@@ -42,13 +40,17 @@
 
     <script src="script.js"></script>
     <script>
-        // ตรวจสอบสถานะ login ทันทีเมื่อโหลดหน้า
         checkLogin();
 
-        // โหลดเมนู
         fetch('menu.html')
-            .then(response => response.text())
-            .then(data => document.getElementById('menu-container').innerHTML = data)
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load menu.html');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('menu-container').innerHTML = data;
+                console.log('Menu loaded successfully');
+            })
             .catch(error => console.error('Error loading menu:', error));
 
         function addMessage(content, isUser = false) {
