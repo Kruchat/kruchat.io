@@ -93,7 +93,7 @@ canvas {
     width: 100% !important;
     height: auto !important;
     max-height: 300px;
-    marginDCS: 10px;
+    margin-top: 10px;
 }
 
 .file-card-container {
@@ -154,13 +154,18 @@ canvas {
     color: #ef4444;
 }
 
-/* ปรับ navbar-end ให้มองเห็นชัดเจน */
 .navbar-end {
     display: flex;
     align-items: center;
 }
 
-/* Media Query สำหรับมือถือ */
+/* เพิ่มสไตล์ให้ปุ่มออกจากระบบเด่นขึ้น */
+.navbar-end .btn-ghost.logout-btn,
+.dropdown-content .btn-ghost.logout-btn {
+    color: #ef4444; /* สีแดงเพื่อให้เด่น */
+    font-weight: 500;
+}
+
 @media (max-width: 640px) {
     html, body {
         font-size: 14px;
@@ -231,6 +236,6 @@ canvas {
         font-size: 1.25rem;
     }
     .navbar-end .btn-ghost {
-        padding: 0.5rem; /* ป้องกันปุ่มเล็กเกินไป */
+        padding: 0.5rem;
     }
 }
