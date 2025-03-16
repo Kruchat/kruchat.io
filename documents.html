@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการข้อมูล - คลังเอกสาร</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <!-- เรียกใช้เมนู -->
+    <div id="menu-container"></div>
+
+    <!-- เนื้อหาคลังเอกสาร -->
+    <div class="main-container">
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat chat-start">
+                    <div class="chat-image avatar">
+                        <div class="w-10 rounded-full">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        </div>
+                    </div>
+                    <div class="chat-header">
+                        ระบบ
+                        <time class="text-xs opacity-50">เริ่มต้น</time>
+                    </div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! (ยังไม่มีการดำเนินการในส่วนนี้)</div>
+                    <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
+                </div>
+            </div>
+            <div class="chat-input">
+                <div class="flex gap-2">
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์คำสั่ง...">
+                    <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // โหลดเมนู
+        fetch('menu.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('menu-container').innerHTML = data);
+
+        function addMessage(content, isUser = false) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat ${isUser ? 'chat-end' : 'chat-start'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="chat-image avatar">
+                    <div class="w-10 rounded-full">
+                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                    </div>
+                </div>
+                <div class="chat-header">
+                    ${isUser ? 'คุณ' : 'ระบบ'}
+                    <time class="text-xs opacity-50">${new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</time>
+                </div>
+                <div class="chat-bubble ${isUser ? 'bg-primary text-white' : ''}">${content}</div>
+                <div class="chat-footer opacity-50">${isUser ? 'ส่งแล้ว' : 'ตอบกลับ'}</div>
+            `;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function processCommand() {
+            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            if (!input) return;
+
+            addMessage(input, true);
+            addMessage("ส่วนนี้ยังไม่พร้อมใช้งาน");
+
+            document.getElementById('searchInput').value = '';
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                processCommand();
+            }
+        });
+    </script>
+</body>
+</html>
