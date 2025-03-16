@@ -9,16 +9,14 @@ function login() {
     const errorMessage = document.getElementById("error-message");
 
     if (username === VALID_USER && password === VALID_PASSWORD) {
-        // บันทึกสถานะ login
         localStorage.setItem("isLoggedIn", "true");
-        // เปลี่ยนหน้าไป documents.html
-        window.location.href = "documents.html";
+        window.location.href = "documents.html"; // หรือเปลี่ยนเป็น "index.html" ถ้าต้องการให้ไปหน้าหลักก่อน
     } else {
         errorMessage.classList.remove("hidden");
     }
 }
 
-// ตรวจสอบสถานะ login เมื่อโหลดหน้า documents.html
+// ตรวจสอบสถานะ login
 function checkLogin() {
     if (localStorage.getItem("isLoggedIn") !== "true") {
         window.location.href = "login.html";
