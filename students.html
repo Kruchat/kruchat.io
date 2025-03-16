@@ -40,11 +40,22 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
+        // ตรวจสอบสถานะ login
+        checkLogin();
+
         // โหลดเมนู
         fetch('menu.html')
-            .then(response => response.text())
-            .then(data => document.getElementById('menu-container').innerHTML = data);
+            .then(response => {
+                if (!response.ok) throw new Error('Failed to load menu.html');
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('menu-container').innerHTML = data;
+                console.log('Menu loaded successfully');
+            })
+            .catch(error => console.error('Error loading menu:', error));
 
         const studentData = [
             { name: "เด็กหญิงโชติกา ศรีทหาร", disability: "บุคคลออทิสติก", id: "1469000156861", gender: "หญิง", dob: "29 ต.ค. 2562", age: 5, address: "54/3 หมู่ 7 บ้านดงหมู ต.คุ้มเก่า อ.เขาวง จ.กาฬสินธุ์ 46160", guardian: "นายไพรัตน์ ศรีหาตา (ตา)", phone: "0917170455" },
@@ -140,9 +151,27 @@
                     options: {
                         scales: {
                             y: { beginAtZero: true, title: { display: true, text: 'จำนวนเด็ก (คน)' } },
-                            x: { title: { display: true, text: 'ประเภทความพิการ' } }
+                            x: { 
+                                title: { display: true, text: 'ประเภทความพิการ' },
+                                ticks: {
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        return label.length > 15 ? label.substring(0, 15) + '...' : label;
+                                    }
+                                }
+                            }
                         },
-                        plugins: { legend: { display: false } }
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        return `${label}: ${context.raw} คน`;
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
             }, 100);
@@ -192,7 +221,16 @@
                             y: { beginAtZero: true, title: { display: true, text: 'จำนวนเด็ก (คน)' } },
                             x: { title: { display: true, text: 'อายุ (ปี)' } }
                         },
-                        plugins: { legend: { display: false } }
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.raw} คน`;
+                                    }
+                                }
+                            }
+                        }
                     }
                 });
             }, 100);
@@ -200,7 +238,10 @@
 
         function searchData() {
             const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!searchTerm) return;
+            if (!searchTerm) {
+                addMessage("กรุณากรอกข้อมูลเพื่อค้นหา");
+                return;
+            }
 
             addMessage(searchTerm, true);
 
@@ -216,7 +257,7 @@
                     String(student.age).includes(searchTerm) ||
                     student.address.toLowerCase().includes(searchTerm) ||
                     student.guardian.toLowerCase().includes(searchTerm) ||
-                    student.phone.includes(searchTerm)
+                    (student.phone && student.phone.includes(searchTerm))
                 );
 
                 if (results.length > 0) {
@@ -227,10 +268,10 @@
                             <strong>เลขบัตรประชาชน:</strong> ${student.id}<br>
                             <strong>เพศ:</strong> ${student.gender}<br>
                             <strong>วันเกิด:</strong> ${student.dob}<br>
-                            <strong>อายุ:</strong> ${student.age}<br>
+                            <strong>อายุ:</strong> ${student.age} ปี<br>
                             <strong>ที่อยู่:</strong> ${student.address}<br>
                             <strong>ผู้ปกครอง:</strong> ${student.guardian}<br>
-                            <strong>เบอร์โทร:</strong> ${student.phone}
+                            <strong>เบอร์โทร:</strong> ${student.phone || 'ไม่ระบุ'}
                         `;
                         addMessage(response);
                     });
