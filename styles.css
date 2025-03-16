@@ -8,20 +8,25 @@ html, body {
 
 /* เมนูด้านบน */
 #menu-container {
-    position: fixed; /* ทำให้เมนูอยู่ด้านบนตลอด */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1000; /* ให้เมนูอยู่เหนือเนื้อหา */
-    background: white; /* ป้องกันเนื้อหาทับซ้อนเห็นพื้นหลัง */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ดูแยกจากเนื้อหา */
+    z-index: 1000;
+    background: inherit; /* ใช้สีพื้นหลังจาก DaisyUI theme */
+}
+
+/* ปรับ navbar ให้แนบด้านบน */
+.navbar {
+    padding: 0 1rem; /* ปรับ padding ให้สมดุล */
+    min-height: 64px; /* ความสูงขั้นต่ำของ navbar */
 }
 
 /* ปรับ main-container ให้เลี่ยงเมนู */
 .main-container {
     padding: 20px;
-    margin-top: 64px; /* ความสูงเมนูสมมติ 64px ปรับตามจริง */
-    height: calc(100vh - 64px); /* ปรับตามความสูงเมนู */
+    margin-top: 64px; /* ความสูง navbar */
+    height: calc(100vh - 64px);
     display: flex;
     flex-direction: column;
 }
@@ -29,7 +34,7 @@ html, body {
 .chat-container {
     max-width: 800px;
     margin: 0 auto;
-    height: 100%; /* เปลี่ยนจาก 70vh เป็น 100% เพื่อเต็ม container */
+    height: 100%;
     display: flex;
     flex-direction: column;
     background: white;
@@ -54,18 +59,20 @@ html, body {
 }
 
 .chat-input .flex {
-    align-items: stretch; /* ทำให้ช่องพิมพ์และปุ่มยืดเต็ม */
+    align-items: stretch;
 }
 
 .chat-input input {
     flex: 1;
-    min-height: 40px; /* ป้องกันช่องพิมพ์ดูเล็กเกิน */
-    padding: 0.5rem; /* ปรับ padding ภายในช่องพิมพ์ */
+    min-height: 48px; /* ปรับความสูงให้ดูดีขึ้น */
+    padding: 0.75rem; /* เพิ่ม padding ภายใน */
+    font-size: 1rem; /* ขนาดตัวอักษรที่อ่านง่าย */
 }
 
 .chat-input button {
-    min-height: 40px; /* ให้ปุ่มสูงเท่าช่องพิมพ์ */
-    padding: 0 1rem; /* ปรับ padding ปุ่ม */
+    min-height: 48px;
+    padding: 0 1.5rem; /* ปรับความกว้างปุ่ม */
+    font-size: 1rem;
 }
 
 .chat-bubble {
@@ -114,11 +121,15 @@ canvas {
 @media (max-width: 640px) {
     .main-container {
         padding: 10px;
-        margin-top: 56px; /* ปรับตามความสูงเมนูบนมือถือ */
+        margin-top: 56px; /* ปรับตามความสูง navbar บนมือถือ */
         height: calc(100vh - 56px);
     }
+    .navbar {
+        padding: 0 0.5rem; /* ลด padding บนมือถือ */
+        min-height: 56px; /* ลดความสูงบนมือถือ */
+    }
     .chat-container {
-        height: 100%; /* เต็มจอบนมือถือ */
+        height: 100%;
         border-radius: 10px;
     }
     .file-card-container {
@@ -143,10 +154,12 @@ canvas {
     }
     .chat-input input {
         width: 100%;
-        min-height: 48px; /* เพิ่มความสูงช่องพิมพ์บนมือถือ */
+        min-height: 48px;
+        padding: 0.75rem;
     }
     .chat-input button {
         width: 100%;
         min-height: 48px;
+        padding: 0.75rem;
     }
 }
