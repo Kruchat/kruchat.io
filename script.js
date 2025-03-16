@@ -10,7 +10,7 @@ function login() {
 
     if (username === VALID_USER && password === VALID_PASSWORD) {
         localStorage.setItem("isLoggedIn", "true");
-        window.location.href = "documents.html"; // หรือเปลี่ยนเป็น "index.html" ถ้าต้องการให้ไปหน้าหลักก่อน
+        window.location.href = "documents.html"; // หรือ "index.html" ตามที่ต้องการ
     } else {
         errorMessage.classList.remove("hidden");
     }
@@ -23,6 +23,7 @@ function checkLogin() {
     }
 }
 
+// ฟังก์ชัน logout
 function logout() {
     localStorage.removeItem("isLoggedIn");
     window.location.href = "login.html";
