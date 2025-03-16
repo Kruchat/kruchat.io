@@ -7,7 +7,6 @@ html, body {
     font-size: 16px;
 }
 
-/* เมนูด้านบน */
 #menu-container {
     position: fixed;
     top: 0;
@@ -17,20 +16,17 @@ html, body {
     background: inherit;
 }
 
-/* ปรับ navbar */
 .navbar {
     padding: 0 1rem;
     min-height: 56px;
     align-items: center;
 }
 
-/* ปรับเมนูให้เล็กลง */
 .navbar-start .btn {
     font-size: 1rem;
     padding: 0.5rem 1rem;
 }
 
-/* ปรับ main-container */
 .main-container {
     padding: 1rem;
     margin-top: 56px;
@@ -97,7 +93,7 @@ canvas {
     width: 100% !important;
     height: auto !important;
     max-height: 300px;
-    margin-top: 10px;
+    marginDCS: 10px;
 }
 
 .file-card-container {
@@ -130,7 +126,6 @@ canvas {
     flex-wrap: wrap;
 }
 
-/* เพิ่มสไตล์สำหรับหน้า login */
 .login-container {
     height: 100vh;
     display: flex;
@@ -156,10 +151,16 @@ canvas {
 }
 
 .text-error {
-    color: #ef4444; /* สีแดงจาก DaisyUI */
+    color: #ef4444;
 }
 
-/* ปรับสำหรับหน้าจอเล็ก (มือถือ) */
+/* ปรับ navbar-end ให้มองเห็นชัดเจน */
+.navbar-end {
+    display: flex;
+    align-items: center;
+}
+
+/* Media Query สำหรับมือถือ */
 @media (max-width: 640px) {
     html, body {
         font-size: 14px;
@@ -224,9 +225,12 @@ canvas {
         font-size: 0.875rem;
     }
     .card-body {
-        padding: 1.5rem; /* ลด padding บนมือถือ */
+        padding: 1.5rem;
     }
     .card-title {
-        font-size: 1.25rem; /* ลดขนาดหัวข้อบนมือถือ */
+        font-size: 1.25rem;
+    }
+    .navbar-end .btn-ghost {
+        padding: 0.5rem; /* ป้องกันปุ่มเล็กเกินไป */
     }
 }
