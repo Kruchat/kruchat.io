@@ -1,16 +1,29 @@
-<!-- menu.html -->
 <nav class="navbar bg-base-100 shadow-lg">
     <div class="navbar-start">
         <a class="btn btn-ghost text-xl" href="index.html">ระบบจัดการข้อมูล</a>
     </div>
-    <div class="navbar-center">
+    <div class="navbar-center hidden md:flex"> <!-- ซ่อนบนมือถือ แสดงบนเดสก์ท็อป -->
         <ul class="menu menu-horizontal px-1">
             <li><a href="index.html">หน้าหลัก</a></li>
             <li><a href="students.html">ข้อมูลนักเรียน</a></li>
             <li><a href="documents.html">คลังเอกสาร</a></li>
         </ul>
     </div>
-    <div class="navbar-end">
+    <div class="navbar-end md:hidden"> <!-- แสดงเฉพาะบนมือถือ -->
+        <div class="dropdown dropdown-end">
+            <label tabindex="0" class="btn btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </label>
+            <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li><a href="index.html">หน้าหลัก</a></li>
+                <li><a href="students.html">ข้อมูลนักเรียน</a></li>
+                <li><a href="documents.html">คลังเอกสาร</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="navbar-end hidden md:flex"> <!-- ซ่อนบนมือถือ -->
         <!-- สามารถเพิ่มปุ่มหรือเมนูเพิ่มเติมได้ที่นี่ -->
     </div>
 </nav>
