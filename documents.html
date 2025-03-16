@@ -27,6 +27,11 @@
             margin-bottom: 0.5rem;
             color: #1f2937;
         }
+        .file-card .button-group {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -122,7 +127,10 @@
                     const fileCards = data.files.map(file => `
                         <div class="file-card">
                             <h3>${file.name}</h3>
-                            <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank" class="btn btn-sm btn-outline btn-primary">ดูไฟล์</a>
+                            <div class="button-group">
+                                <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank" class="btn btn-sm btn-outline btn-primary">ดูไฟล์</a>
+                                <a href="https://drive.google.com/uc?export=download&id=${file.id}" class="btn btn-sm btn-success">ดาวน์โหลด</a>
+                            </div>
                         </div>
                     `).join('');
                     addMessage(`<strong>ผลการค้นหา "${searchTerm}":</strong><div class="file-card-container">${fileCards}</div>`);
