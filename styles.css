@@ -6,51 +6,73 @@ html, body {
     overflow-x: hidden;
 }
 
-/* จากโค้ดเดิม */
+/* เมนูด้านบน */
+#menu-container {
+    position: fixed; /* ทำให้เมนูอยู่ด้านบนตลอด */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* ให้เมนูอยู่เหนือเนื้อหา */
+    background: white; /* ป้องกันเนื้อหาทับซ้อนเห็นพื้นหลัง */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* เพิ่มเงาให้ดูแยกจากเนื้อหา */
+}
+
+/* ปรับ main-container ให้เลี่ยงเมนู */
 .main-container {
     padding: 20px;
-    height: calc(100vh - 64px); /* รวมจากโค้ดใหม่เพื่อให้เต็มจอ */
+    margin-top: 64px; /* ความสูงเมนูสมมติ 64px ปรับตามจริง */
+    height: calc(100vh - 64px); /* ปรับตามความสูงเมนู */
     display: flex;
     flex-direction: column;
 }
 
-/* รวมโค้ดเดิมและใหม่ */
 .chat-container {
-    max-width: 800px; /* จากโค้ดเดิม */
+    max-width: 800px;
     margin: 0 auto;
-    height: 70vh; /* จากโค้ดเดิม */
+    height: 100%; /* เปลี่ยนจาก 70vh เป็น 100% เพื่อเต็ม container */
     display: flex;
     flex-direction: column;
-    background: white; /* จากโค้ดเดิม */
-    border-radius: 15px; /* จากโค้ดเดิม */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* จากโค้ดเดิม */
-    flex: 1; /* จากโค้ดใหม่ เพื่อให้ยืดเต็ม */
-    width: 100%; /* จากโค้ดใหม่ */
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    width: 100%;
 }
 
-/* รวมโค้ดเดิมและใหม่ */
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 20px; /* จากโค้ดเดิม */
+    padding: 20px;
 }
 
-/* รวมโค้ดเดิมและใหม่ */
 .chat-input {
-    padding: 20px; /* จากโค้ดเดิม */
-    border-top: 1px solid #eee; /* จากโค้ดเดิม */
-    background: #f9fafb; /* จากโค้ดเดิม */
-    border-bottom-left-radius: 15px; /* จากโค้ดเดิม */
-    border-bottom-right-radius: 15px; /* จากโค้ดเดิม */
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background: #f9fafb;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
 }
 
-/* จากโค้ดเดิม */
+.chat-input .flex {
+    align-items: stretch; /* ทำให้ช่องพิมพ์และปุ่มยืดเต็ม */
+}
+
+.chat-input input {
+    flex: 1;
+    min-height: 40px; /* ป้องกันช่องพิมพ์ดูเล็กเกิน */
+    padding: 0.5rem; /* ปรับ padding ภายในช่องพิมพ์ */
+}
+
+.chat-input button {
+    min-height: 40px; /* ให้ปุ่มสูงเท่าช่องพิมพ์ */
+    padding: 0 1rem; /* ปรับ padding ปุ่ม */
+}
+
 .chat-bubble {
     max-width: 100%;
     word-wrap: break-word;
 }
 
-/* จากโค้ดเดิม */
 canvas {
     width: 100% !important;
     height: auto !important;
@@ -91,11 +113,13 @@ canvas {
 /* ปรับสำหรับหน้าจอเล็ก */
 @media (max-width: 640px) {
     .main-container {
-        padding: 10px; /* ลด padding บนมือถือ */
+        padding: 10px;
+        margin-top: 56px; /* ปรับตามความสูงเมนูบนมือถือ */
+        height: calc(100vh - 56px);
     }
     .chat-container {
-        height: calc(100vh - 64px); /* ปรับให้เต็มจอบนมือถือ */
-        border-radius: 10px; /* ลดความโค้งบนมือถือ */
+        height: 100%; /* เต็มจอบนมือถือ */
+        border-radius: 10px;
     }
     .file-card-container {
         grid-template-columns: 1fr;
@@ -108,10 +132,10 @@ canvas {
         font-size: 1rem;
     }
     .chat-messages {
-        padding: 10px; /* ลด padding บนมือถือ */
+        padding: 10px;
     }
     .chat-input {
-        padding: 10px; /* ลด padding บนมือถือ */
+        padding: 10px;
     }
     .chat-input .flex {
         flex-direction: column;
@@ -119,8 +143,10 @@ canvas {
     }
     .chat-input input {
         width: 100%;
+        min-height: 48px; /* เพิ่มความสูงช่องพิมพ์บนมือถือ */
     }
     .chat-input button {
         width: 100%;
+        min-height: 48px;
     }
 }
