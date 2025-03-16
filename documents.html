@@ -8,7 +8,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ปรับแต่ง Card และเลย์เอาต์ */
         .file-card-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -53,14 +52,14 @@
                         ระบบ
                         <time class="text-xs opacity-50">เริ่มต้น</time>
                     </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! พิมพ์ "ค้นหาไฟล์" เพื่อดึงรายชื่อไฟล์จาก Google Drive</div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่คลังเอกสาร! พิมพ์ชื่อไฟล์เพื่อค้นหา (เช่น "document1")</div>
                     <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
                 </div>
             </div>
             <div class="chat-input">
                 <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ 'ค้นหาไฟล์'...">
-                    <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ชื่อไฟล์เพื่อค้นหา...">
+                    <button onclick="processCommand()" class="btn btn-primary">ค้นหา</button>
                 </div>
             </div>
         </div>
@@ -96,23 +95,18 @@
         }
 
         function processCommand() {
-            const input = document.getElementById('searchInput').value.trim().toLowerCase();
+            const input = document.getElementById('searchInput').value.trim();
             if (!input) return;
 
             addMessage(input, true);
-
-            if (input === "ค้นหาไฟล์") {
-                fetchFilesFromGoogleDrive();
-            } else {
-                addMessage("คำสั่งไม่ถูกต้อง กรุณาพิมพ์ 'ค้นหาไฟล์'");
-            }
+            fetchFilesFromGoogleDrive(input);
 
             document.getElementById('searchInput').value = '';
         }
 
-        async function fetchFilesFromGoogleDrive() {
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec?folderId=179ldHaHCOmsNUz7IfosswviHbp2BAEKi";
-            addMessage("กำลังดึงข้อมูลจาก Google Drive...");
+        async function fetchFilesFromGoogleDrive(searchTerm) {
+            const scriptUrl = `https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec?folderId=179ldHaHCOmsNUz7IfosswviHbp2BAEKi&search=${encodeURIComponent(searchTerm)}`;
+            addMessage(`กำลังค้นหาไฟล์ที่ชื่อ "${searchTerm}" ใน Google Drive...`);
 
             try {
                 const response = await fetch(scriptUrl, {
@@ -129,16 +123,15 @@
                 if (data.error) {
                     addMessage(`เกิดข้อผิดพลาดจาก Google Apps Script: ${data.error}`);
                 } else if (data.files && data.files.length > 0) {
-                    // สร้าง HTML สำหรับ Card
                     const fileCards = data.files.map(file => `
                         <div class="file-card">
                             <h3>${file.name}</h3>
                             <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">ดูไฟล์</a>
                         </div>
                     `).join('');
-                    addMessage(`<strong>รายชื่อไฟล์ในโฟลเดอร์:</strong><div class="file-card-container">${fileCards}</div>`);
+                    addMessage(`<strong>ผลการค้นหา "${searchTerm}":</strong><div class="file-card-container">${fileCards}</div>`);
                 } else {
-                    addMessage("ไม่พบไฟล์ในโฟลเดอร์นี้");
+                    addMessage(`ไม่พบไฟล์ที่ชื่อ "${searchTerm}" ในโฟลเดอร์นี้`);
                 }
             } catch (error) {
                 addMessage("เกิดข้อผิดพลาดในการดึงข้อมูล: " + error.message);
