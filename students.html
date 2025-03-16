@@ -27,13 +27,13 @@
                         ระบบ
                         <time class="text-xs opacity-50">เริ่มต้น</time>
                     </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่ข้อมูลนักเรียน! กรุณาพิมพ์ข้อมูลเพื่อค้นหา หรือ "ทั้งหมด รวม กราฟ" เพื่อดูสรุป</div>
+                    <div class="chat-bubble">ยินดีต้อนรับสู่ข้อมูลนักเรียน! กรุณาพิมพ์ข้อมูลเพื่อค้นหา หรือ "สรุป" เพื่อดูสรุป</div>
                     <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
                 </div>
             </div>
             <div class="chat-input">
                 <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ข้อมูลใดๆ หรือ 'ทั้งหมด รวม กราฟ'...">
+                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์ข้อมูลใดๆ หรือ 'สรุป'...">
                     <button onclick="searchData()" class="btn btn-primary">ค้นหา</button>
                 </div>
             </div>
@@ -245,7 +245,7 @@
 
             addMessage(searchTerm, true);
 
-            if (searchTerm === "ทั้งหมด รวม กราฟ") {
+            if (searchTerm === "สรุป") {
                 showSummaryWithGraph();
             } else {
                 const results = studentData.filter(student => 
