@@ -1,41 +1,126 @@
-/* styles.css */
+/* รีเซ็ตและตั้งค่าเต็มจอ */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* จากโค้ดเดิม */
 .main-container {
     padding: 20px;
-}
-
-.chat-container {
-    max-width: 800px;
-    margin: 0 auto;
-    height: 70vh;
+    height: calc(100vh - 64px); /* รวมจากโค้ดใหม่เพื่อให้เต็มจอ */
     display: flex;
     flex-direction: column;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* รวมโค้ดเดิมและใหม่ */
+.chat-container {
+    max-width: 800px; /* จากโค้ดเดิม */
+    margin: 0 auto;
+    height: 70vh; /* จากโค้ดเดิม */
+    display: flex;
+    flex-direction: column;
+    background: white; /* จากโค้ดเดิม */
+    border-radius: 15px; /* จากโค้ดเดิม */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* จากโค้ดเดิม */
+    flex: 1; /* จากโค้ดใหม่ เพื่อให้ยืดเต็ม */
+    width: 100%; /* จากโค้ดใหม่ */
+}
+
+/* รวมโค้ดเดิมและใหม่ */
 .chat-messages {
     flex: 1;
     overflow-y: auto;
-    padding: 20px;
+    padding: 20px; /* จากโค้ดเดิม */
 }
 
+/* รวมโค้ดเดิมและใหม่ */
 .chat-input {
-    padding: 20px;
-    border-top: 1px solid #eee;
-    background: #f9fafb;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+    padding: 20px; /* จากโค้ดเดิม */
+    border-top: 1px solid #eee; /* จากโค้ดเดิม */
+    background: #f9fafb; /* จากโค้ดเดิม */
+    border-bottom-left-radius: 15px; /* จากโค้ดเดิม */
+    border-bottom-right-radius: 15px; /* จากโค้ดเดิม */
 }
 
+/* จากโค้ดเดิม */
 .chat-bubble {
     max-width: 100%;
     word-wrap: break-word;
 }
 
+/* จากโค้ดเดิม */
 canvas {
     width: 100% !important;
     height: auto !important;
     max-height: 300px;
     margin-top: 10px;
+}
+
+.file-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.file-card {
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file-card h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #1f2937;
+    word-break: break-word;
+}
+
+.file-card .button-group {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* ปรับสำหรับหน้าจอเล็ก */
+@media (max-width: 640px) {
+    .main-container {
+        padding: 10px; /* ลด padding บนมือถือ */
+    }
+    .chat-container {
+        height: calc(100vh - 64px); /* ปรับให้เต็มจอบนมือถือ */
+        border-radius: 10px; /* ลดความโค้งบนมือถือ */
+    }
+    .file-card-container {
+        grid-template-columns: 1fr;
+        padding: 0.5rem 0;
+    }
+    .file-card {
+        padding: 0.75rem;
+    }
+    .file-card h3 {
+        font-size: 1rem;
+    }
+    .chat-messages {
+        padding: 10px; /* ลด padding บนมือถือ */
+    }
+    .chat-input {
+        padding: 10px; /* ลด padding บนมือถือ */
+    }
+    .chat-input .flex {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .chat-input input {
+        width: 100%;
+    }
+    .chat-input button {
+        width: 100%;
+    }
 }
