@@ -85,24 +85,24 @@
         }
 
         function fetchFilesFromGoogleDrive() {
-            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec"; // แทนที่ด้วย URL ของ Web App
+            const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec";
             addMessage("กำลังดึงข้อมูลจาก Google Drive...");
 
             fetch(scriptUrl, {
                 method: 'POST',
-                mode: 'cors', // เพิ่มการจัดการ CORS
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" })
+                body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" }),
+                redirect: 'follow' // เพิ่มการจัดการ redirect ถ้ามี
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
                 }
                 return response.json();
             })
             .then(data => {
                 if (data.error) {
-                    addMessage(`เกิดข้อผิดพลาด: ${data.error}`);
+                    addMessage(`เกิดข้อผิดพลาดจาก Google Apps Script: ${data.error}`);
                 } else if (data.files && data.files.length > 0) {
                     const fileList = data.files.map(file => 
                         `- ${file.name} (<a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">ดูไฟล์</a>)`
