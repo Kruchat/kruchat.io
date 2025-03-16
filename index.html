@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คู่มือการฝึกเดิน 5 ก้าวสำหรับเด็ก</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            color: #555;
+            background-color: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 960px;
+            margin: 30px auto;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+        }
+
+        h1, h2, h3 {
+            color: #343a40;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #007bff;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #28a745;
+            border-bottom: 3px solid #e9ecef;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 span {
+            margin-right: 10px;
+            font-size: 1.5rem;
+            color: #6c757d;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: #007bff;
+            margin-top: 1.5rem;
+        }
+
+        .step {
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            background-color: #fdfdfe;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .step-image {
+            text-align: center;
+        }
+
+        .step-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        .step-content ul {
+            list-style-type: disc;
+            padding-left: 25px;
+        }
+
+        .step-content li {
+            margin-bottom: 0.7rem;
+            color: #495057;
+        }
+
+        .important {
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        .info-box {
+            background-color: #e7f3ff;
+            border: 1px solid #cce5ff;
+            color: #004085;
+            padding: 15px;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 180px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -90px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .progress-table th, .progress-table td {
+            border: 1px solid #ced4da;
+            padding: 10px;
+            text-align: center;
+            background-color: #fff;
+        }
+
+        .progress-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .controls {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .controls button {
+            padding: 12px 20px;
+            margin: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .controls button:hover {
+            background-color: #0056b3;
+        }
+
+        .controls button.night-mode {
+            background-color: #343a40;
+        }
+
+        .controls button.night-mode:hover {
+            background-color: #1d2124;
+        }
+
+        .step-content {
+            /* display: block; Initially show content */
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #trainingDaysCounter {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #28a745;
+        }
+
+        /* Dark Mode */
+        body.dark-mode {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3 {
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .container {
+            background-color: #495057;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            border: 1px solid #6c757d;
+        }
+
+        body.dark-mode .step {
+            background-color: #555b62;
+            border: 1px solid #6c757d;
+        }
+
+        body.dark-mode .step-content li {
+            color: #e9ecef;
+        }
+
+        body.dark-mode .info-box {
+            background-color: #4c4c4c;
+            border: 1px solid #666;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .progress-table {
+            border: 1px solid #6c757d;
+        }
+
+        body.dark-mode .progress-table th {
+            background-color: #6c757d;
+            color: #f8f9fa;
+        }
+
+        body.dark-mode .progress-table td {
+            background-color: #555b62;
+            color: #e9ecef;
+        }
+
+        body.dark-mode .controls button {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        body.dark-mode .controls button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>คู่มือการฝึกเดิน 5 ก้าวสำหรับเด็ก</h1>
+
+        <div class="info-box">
+            <p><strong>คำแนะนำการใช้งาน:</strong> คู่มือนี้ออกแบบมาเพื่อช่วยให้เด็กฝึกเดินโดยใช้ราวฝึกเดินอย่างเป็นขั้นตอนและปลอดภัย โปรดอ่านและทำความเข้าใจแต่ละขั้นตอนก่อนเริ่มต้นการฝึก</p>
+            <p><strong class="important">ข้อควรระวังเพื่อความปลอดภัย:</strong></p>
+            <ul>
+                <li>ตรวจสอบให้แน่ใจว่าราวฝึกเดินมั่นคงและไม่ลื่น</li>
+                <li>ดูแลเด็กอย่างใกล้ชิดตลอดเวลา</li>
+                <li>อย่าบังคับให้เด็กทำในสิ่งที่เขายังไม่พร้อม</li>
+                <li>ปรึกษาแพทย์หรือนักกายภาพบำบัดหากมีข้อสงสัยหรือข้อกังวล</li>
+            </ul>
+        </div>
+
+        <div class="step preparation">
+            <div class="step-image">
+                <img src="placeholder_preparation.svg" alt="เตรียมความพร้อม" width="150">
+            </div>
+            <div class="step-content">
+                <h2><span>👣</span> 1. ขั้นเตรียมความพร้อม (Preparation)</h2>
+                <ul>
+                    <li><strong>ตรวจสอบอุปกรณ์:</strong> ราวฝึกเดินต้องมั่นคง แข็งแรง ไม่โยกคลอน</li>
+                    <li><strong>จัดพื้นที่:</strong> พื้นที่ต้องโล่ง ไม่มีสิ่งกีดขวางตลอดแนวราวฝึกเดิน</li>
+                    <li><strong>เลือกรองเท้า:</strong> เลือกรองเท้าที่พอดี มีพื้นกันลื่น หรือใช้ถุงเท้ากันลื่น</li>
+                    <li><strong>ปรับความสูงราว:</strong> ปรับความสูงของราวให้เหมาะสมกับความสูงของเด็ก</li>
+                    <li><strong>อุ่นร่างกาย:</strong> ยืดเหยียดกล้ามเนื้อขาและเท้าเบาๆ</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ทิปส์:</strong> การเตรียมความพร้อมที่ดีจะช่วยให้การฝึกเป็นไปอย่างราบรื่นและปลอดภัย
+                </div>
+            </div>
+        </div>
+
+        <div class="step demonstration">
+            <div class="step-image">
+                <img src="placeholder_demonstration.svg" alt="สาธิต" width="150">
+            </div>
+            <div class="step-content">
+                <h2><span>🚶</span> 2. ขั้นสาธิต (Demonstration)</h2>
+                <ul>
+                    <li><strong>การจับราว:</strong> จับราวด้วยมือทั้งสองข้าง ไม่แน่นหรือหลวมจนเกินไป</li>
+                    <li><strong>การวางเท้า:</strong> วางเท้าโดยให้ส้นเท้าลงก่อน แล้วจึงเป็นปลายเท้า</li>
+                    <li><strong>การนับก้าว:</strong> แสดงการนับก้าว "หนึ่ง สอง สาม สี่ ห้า" พร้อมการก้าวเท้าแต่ละข้าง</li>
+                    <li><strong>การทรงตัว:</strong> อธิบายวิธีการทรงตัวโดยใช้ราวเป็นที่พยุงและช่วยสร้างความมั่นใจ</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ทิปส์:</strong> สาธิตให้เด็กดูช้าๆ และชัดเจน ทำซ้ำได้หากจำเป็น
+                </div>
+            </div>
+        </div>
+
+        <div class="step teaching">
+            <div class="step-image">
+                <img src="placeholder_teaching.svg" alt="สอน" width="150">
+            </div>
+            <div class="step-content">
+                <h2><span>🧑‍🏫</span> 3. ขั้นสอน (Teaching)</h2>
+                <ul>
+                    <li><strong>การยืน:</strong> เริ่มจากให้เด็กยืนตรงจับราวให้มั่นคง วางเท้าห่างกันเล็กน้อย</li>
+                    <li><strong>การก้าวเท้า:</strong> สอนการก้าวเท้าทีละข้าง โดยเริ่มจากก้าวสั้นๆ ก่อน</li>
+                    <li><strong>การนับ:</strong> นับ "หนึ่ง" เมื่อก้าวเท้าแรก และนับต่อเนื่องจนถึง "ห้า"</li>
+                    <li><strong>การให้กำลังใจ:</strong> ให้กำลังใจทุกครั้งที่ก้าวสำเร็จ แม้เพียงก้าวเดียว</li>
+                    <li><strong>การเพิ่มระยะก้าว:</strong> ค่อยๆ เพิ่มระยะก้าวให้ยาวขึ้นเมื่อเด็กรู้สึกมั่นใจมากขึ้น</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ทิปส์:</strong> ใช้คำพูดที่เข้าใจง่ายและให้กำลังใจอย่างสม่ำเสมอ
+                </div>
+            </div>
+        </div>
+
+        <div class="step practice">
+            <div class="step-image">
+                <img src="placeholder_practice.svg" alt="ฝึกซ้ำ" width="150">
+            </div>
+            <div class="step-content">
+                <h2><span>🔄</span> 4. ขั้นการฝึกซ้ำ (Practice)</h2>
+                <ul>
+                    <li><strong>จำนวนรอบฝึก:</strong> ฝึกก้าว 5 ก้าวซ้ำๆ วันละ 3-5 รอบ</li>
+                    <li><strong>ลดความช่วยเหลือ:</strong> ค่อยๆ ลดการช่วยเหลือ จากจับมือสองข้าง เป็นจับมือเดียว</li>
+                    <li><strong>เกมจูงใจ:</strong> สร้างเกมสนุกระหว่างฝึก เช่น วางของเล่นที่ปลายทาง</li>
+                    <li><strong>ฝึกเดินกลับ:</strong> ให้เด็กฝึกเดินกลับโดยหมุนตัวที่ปลายราว</li>
+                    <li><strong>บันทึกพัฒนาการ:</strong> สังเกตและบันทึกการเปลี่ยนแปลงและความมั่นใจที่เพิ่มขึ้นทุกวัน</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ทิปส์:</strong> การฝึกซ้ำอย่างสม่ำเสมอจะช่วยเสริมสร้างความแข็งแรงและความมั่นใจ
+                </div>
+            </div>
+        </div>
+
+        <div class="step conclusion">
+            <div class="step-image">
+                <img src="placeholder_conclusion.svg" alt="สรุป" width="150">
+            </div>
+            <div class="step-content">
+                <h2><span>🎉</span> 5. ขั้นสรุป (Conclusion)</h2>
+                <ul>
+                    <li><strong>ทบทวน:</strong> ทบทวนความก้าวหน้าหลังการฝึกแต่ละครั้ง</li>
+                    <li><strong>บันทึก:</strong> บันทึกพัฒนาการและสิ่งที่ต้องปรับปรุง</li>
+                    <li><strong>คำแนะนำผู้ปกครอง:</strong> แนะนำการฝึกต่อเนื่องที่บ้าน</li>
+                    <li><strong>เพิ่มจำนวนก้าว:</strong> เมื่อก้าวได้ 5 ก้าวอย่างมั่นใจ ให้เพิ่มเป็น 10 ก้าว</li>
+                    <li><strong>ให้รางวัล:</strong> ให้รางวัลเมื่อบรรลุเป้าหมาย เพื่อสร้างแรงจูงใจ</li>
+                </ul>
+                <div class="info-box">
+                    <strong>ทิปส์:</strong> การให้กำลังใจและรางวัลจะช่วยให้เด็กมีความสุขกับการฝึก
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="toggleTheme">โหมดกลางวัน/กลางคืน</button>
+            <button class="expand-collapse-all" data-action="expand">ขยายทั้งหมด</button>
+            <button class="expand-collapse-all" data-action="collapse">ย่อทั้งหมด</button>
+            <button id="printButton">พิมพ์คู่มือ</button>
+            <a href="#" download="walking_guide.pdf">ดาวน์โหลด PDF</a>
+        </div>
+
+        <div id="trainingDaysCounter"></div>
+
+        <h3>ตารางบันทึกความก้าวหน้า</h3>
+        <table class="progress-table">
+            <thead>
+                <tr>
+                    <th>วันที่</th>
+                    <th>จำนวนรอบที่ฝึก</th>
+                    <th>จำนวนก้าวสูงสุดที่ทำได้</th>
+                    <th>ความช่วยเหลือที่ใช้</th>
+                    <th>หมายเหตุ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        // JavaScript สำหรับสลับโหมดกลางวัน/กลางคืน
+        const body = document.body;
+        const toggleThemeButton = document.getElementById('toggleTheme');
+
+        toggleThemeButton.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            toggleThemeButton.textContent = body.classList.contains('dark-mode') ? 'โหมดกลางวัน' : 'โหมดกลางคืน';
+        });
+
+        // JavaScript สำหรับขยาย/ย่อส่วนของแต่ละขั้นตอน
+        const stepContents = document.querySelectorAll('.step-content');
+        const expandCollapseButtons = document.querySelectorAll('.expand-collapse-all');
+
+        expandCollapseButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.getAttribute('data-action');
+                stepContents.forEach(content => {
+                    content.classList.toggle('hidden', action === 'collapse');
+                });
+            });
+        });
+
+        // JavaScript สำหรับนับจำนวนวันที่ฝึกต่อเนื่อง
+        const trainingDaysCounter = document.getElementById('trainingDaysCounter');
+        let days = localStorage.getItem('trainingDays') || 0;
+
+        function updateCounter() {
+            trainingDaysCounter.textContent = `ฝึกต่อเนื่องมา ${days} วัน`;
+        }
+
+        // ฟังก์ชันจำลองการเพิ่มวันฝึก (สามารถปรับเปลี่ยนได้ตามความเหมาะสม)
+        function incrementDays() {
+            days++;
+            localStorage.setItem('trainingDays', days);
+            updateCounter();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateCounter);
+
+        // JavaScript สำหรับปุ่มพิมพ์คู่มือ
+        const printButton = document.getElementById('printButton');
+        printButton.addEventListener('click', () => {
+            window.print();
+        });
+    </script>
+</body>
+</html>
