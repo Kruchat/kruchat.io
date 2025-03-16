@@ -40,11 +40,16 @@
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script>
+        // ตรวจสอบสถานะ login ทันทีเมื่อโหลดหน้า
+        checkLogin();
+
         // โหลดเมนู
         fetch('menu.html')
             .then(response => response.text())
-            .then(data => document.getElementById('menu-container').innerHTML = data);
+            .then(data => document.getElementById('menu-container').innerHTML = data)
+            .catch(error => console.error('Error loading menu:', error));
 
         function addMessage(content, isUser = false) {
             const messagesDiv = document.getElementById('chatMessages');
