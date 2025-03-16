@@ -24,10 +24,10 @@ html, body {
     align-items: center;
 }
 
-/* ปรับเมนูให้เล็กลงบนมือถือ */
+/* ปรับเมนูให้เล็กลง */
 .navbar-start .btn {
-    font-size: 1rem; /* ลดขนาดตัวอักษร "ระบบจัดการข้อมูล" */
-    padding: 0.5rem 1rem; /* ลด padding */
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
 }
 
 /* ปรับ main-container */
@@ -130,6 +130,35 @@ canvas {
     flex-wrap: wrap;
 }
 
+/* เพิ่มสไตล์สำหรับหน้า login */
+.login-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 12px;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.text-error {
+    color: #ef4444; /* สีแดงจาก DaisyUI */
+}
+
 /* ปรับสำหรับหน้าจอเล็ก (มือถือ) */
 @media (max-width: 640px) {
     html, body {
@@ -145,7 +174,7 @@ canvas {
         min-height: 56px;
     }
     .navbar-start .btn {
-        font-size: 0.875rem; /* ลดขนาดตัวอักษรบนมือถือ */
+        font-size: 0.875rem;
         padding: 0.25rem 0.5rem;
     }
     .chat-container {
@@ -193,5 +222,11 @@ canvas {
     .file-card .btn-sm {
         padding: 0.75rem 1rem;
         font-size: 0.875rem;
+    }
+    .card-body {
+        padding: 1.5rem; /* ลด padding บนมือถือ */
+    }
+    .card-title {
+        font-size: 1.25rem; /* ลดขนาดหัวข้อบนมือถือ */
     }
 }
