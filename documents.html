@@ -9,10 +9,8 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100">
-    <!-- เรียกใช้เมนู -->
     <div id="menu-container"></div>
 
-    <!-- เนื้อหาคลังเอกสาร -->
     <div class="main-container">
         <div class="chat-container">
             <div class="chat-messages" id="chatMessages">
@@ -84,23 +82,24 @@
             document.getElementById('searchInput').value = '';
         }
 
-        function fetchFilesFromGoogleDrive() {
+        async function fetchFilesFromGoogleDrive() {
             const scriptUrl = "https://script.google.com/macros/s/AKfycbxjnR-yR2FoRdobVq58dXAHOrqeZcQvsrAh9mrA-6ZySLFAoKUkralh8KzFYftH6n-WRQ/exec";
             addMessage("กำลังดึงข้อมูลจาก Google Drive...");
 
-            fetch(scriptUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" }),
-                redirect: 'follow' // เพิ่มการจัดการ redirect ถ้ามี
-            })
-            .then(response => {
+            try {
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    mode: 'cors', // ระบุโหมด CORS
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ folderId: "179ldHaHCOmsNUz7IfosswviHbp2BAEKi" })
+                });
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
                 }
-                return response.json();
-            })
-            .then(data => {
+
+                const data = await response.json();
+
                 if (data.error) {
                     addMessage(`เกิดข้อผิดพลาดจาก Google Apps Script: ${data.error}`);
                 } else if (data.files && data.files.length > 0) {
@@ -111,11 +110,10 @@
                 } else {
                     addMessage("ไม่พบไฟล์ในโฟลเดอร์นี้");
                 }
-            })
-            .catch(error => {
+            } catch (error) {
                 addMessage("เกิดข้อผิดพลาดในการดึงข้อมูล: " + error.message);
                 console.error('Fetch error:', error);
-            });
+            }
         }
 
         document.getElementById('searchInput').addEventListener('keypress', function(e) {
