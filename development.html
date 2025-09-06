@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="th" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบจัดการข้อมูล - บันทึกการพัฒนาตนเอง</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100">
+    <div id="menu-container"></div>
+
+    <div class="main-container">
+        <div class="max-w-4xl mx-auto bg-white p-4 rounded shadow">
+            <h2 class="text-2xl font-bold mb-4 text-center">บันทึกการพัฒนาตนเองของครู</h2>
+            <form id="developmentForm" class="grid grid-cols-1 md:grid-cols-4 gap-2">
+                <input type="date" id="devDate" class="input input-bordered" required>
+                <input type="text" id="devActivity" placeholder="กิจกรรม" class="input input-bordered" required>
+                <input type="number" id="devHours" placeholder="ชั่วโมง" class="input input-bordered" required min="0" step="0.5">
+                <input type="text" id="devNote" placeholder="หมายเหตุ" class="input input-bordered md:col-span-4">
+                <button type="submit" class="btn btn-primary md:col-span-4">เพิ่มบันทึก</button>
+            </form>
+            <div class="overflow-x-auto mt-4">
+                <table class="table w-full" id="developmentTable">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>กิจกรรม</th>
+                            <th>ชั่วโมง</th>
+                            <th>หมายเหตุ</th>
+                            <th>ลบ</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="development.js"></script>
+    <script>
+        checkLogin();
+        fetch('menu.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('menu-container').innerHTML = data)
+            .catch(error => console.error('Error loading menu:', error));
+    </script>
+</body>
+</html>
