@@ -1,103 +1,457 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการข้อมูล - หน้าหลัก</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body class="bg-gray-100">
-    <div id="menu-container"></div>
-
-    <div class="main-container">
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat chat-start">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                        </div>
-                    </div>
-                    <div class="chat-header">
-                        ระบบ
-                        <time class="text-xs opacity-50">เริ่มต้น</time>
-                    </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่หน้าหลัก!</div>
-                    <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
-                </div>
-            </div>
-            <div class="chat-input">
-                <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์คำสั่ง...">
-                    <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-    <script>
-        checkLogin();
-
-        fetch('menu.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load menu.html');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('menu-container').innerHTML = data;
-                console.log('Menu loaded successfully');
-            })
-            .catch(error => console.error('Error loading menu:', error));
-
-        function addMessage(content, isUser = false) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat ${isUser ? 'chat-end' : 'chat-start'}`;
-            
-            messageDiv.innerHTML = `
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                    </div>
-                </div>
-                <div class="chat-header">
-                    ${isUser ? 'คุณ' : 'ระบบ'}
-                    <time class="text-xs opacity-50">${new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</time>
-                </div>
-                <div class="chat-bubble ${isUser ? 'bg-primary text-white' : ''}">${content}</div>
-                <div class="chat-footer opacity-50">${isUser ? 'ส่งแล้ว' : 'ตอบกลับ'}</div>
-            `;
-            
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    <title>Age Calculator (TH)</title>
+    <style>
+        /* โทนสีหลักกำหนดผ่านตัวแปร เพื่อให้ปรับใช้ได้ทั้งโหมดสว่างและโหมดมืด */
+        :root {
+            --bg: #f4f5f7;
+            --card-bg: #ffffff;
+            --text: #1f2933;
+            --muted: #617082;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border: #d4dae3;
+            --success: #166534;
+            --error: #b91c1c;
         }
 
-        function processCommand() {
-            const input = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!input) return;
-
-            addMessage(input, true);
-
-            if (input === "ไปที่ข้อมูลนักเรียน") {
-                window.location.href = "students.html";
-            } else if (input === "ไปที่คลังเอกสาร") {
-                window.location.href = "documents.html";
-            } else {
-                addMessage("คำสั่งไม่ถูกต้อง กรุณาลองใหม่ หรือใช้เมนูด้านบน");
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0f172a;
+                --card-bg: #111827;
+                --text: #e5e7eb;
+                --muted: #94a3b8;
+                --primary: #60a5fa;
+                --primary-hover: #3b82f6;
+                --border: #1e293b;
+                --success: #22c55e;
+                --error: #f87171;
             }
 
-            document.getElementById('searchInput').value = '';
+            body {
+                color-scheme: dark;
+            }
         }
 
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                processCommand();
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Sarabun", "Noto Sans Thai", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, var(--bg), rgba(37, 99, 235, 0.08));
+            color: var(--text);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        main {
+            width: min(720px, 100%);
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            padding: clamp(1.5rem, 3vw, 2.75rem);
+            box-shadow: 0 25px 50px -20px rgba(15, 23, 42, 0.35);
+            border: 1px solid var(--border);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            font-size: clamp(1.9rem, 4vw, 2.75rem);
+            letter-spacing: 0.02em;
+        }
+
+        p.lead {
+            margin-top: -0.75rem;
+            margin-bottom: 2rem;
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        input[type="date"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            font-size: 1.05rem;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background-color: var(--card-bg);
+            color: var(--text);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input[type="date"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1.75rem;
+        }
+
+        button {
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        button:focus-visible {
+            outline: 3px solid rgba(37, 99, 235, 0.6);
+            outline-offset: 2px;
+        }
+
+        .primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+            color: #fff;
+            box-shadow: 0 10px 20px -12px rgba(37, 99, 235, 1);
+        }
+
+        .primary:hover {
+            transform: translateY(-1px);
+        }
+
+        .secondary {
+            background-color: rgba(37, 99, 235, 0.12);
+            color: var(--primary);
+        }
+
+        .neutral {
+            background-color: rgba(148, 163, 184, 0.16);
+            color: var(--text);
+        }
+
+        .danger {
+            background-color: rgba(185, 28, 28, 0.12);
+            color: var(--error);
+        }
+
+        .result-card {
+            margin-top: 2.25rem;
+            padding: 1.75rem;
+            border-radius: 20px;
+            border: 1px dashed var(--border);
+            background: linear-gradient(145deg, rgba(37, 99, 235, 0.07), transparent);
+        }
+
+        .result-title {
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
+        }
+
+        dl {
+            display: grid;
+            grid-template-columns: minmax(140px, auto) 1fr;
+            gap: 0.75rem 1.5rem;
+            margin: 0;
+        }
+
+        dt {
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        dd {
+            margin: 0;
+            font-size: 1.05rem;
+        }
+
+        .error-message {
+            margin-top: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            background-color: rgba(185, 28, 28, 0.12);
+            color: var(--error);
+            display: none;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.7rem;
+            border-radius: 999px;
+            background-color: rgba(34, 197, 94, 0.18);
+            color: var(--success);
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .card {
+                border-radius: 18px;
+            }
+
+            dl {
+                grid-template-columns: 1fr;
+            }
+
+            dt {
+                color: var(--muted);
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <article class="card" aria-labelledby="app-title">
+            <header>
+                <h1 id="app-title">Age Calculator (TH)</h1>
+                <p class="lead">คำนวณอายุอย่างละเอียด พร้อมนับถอยหลังสู่วันเกิดครั้งถัดไป</p>
+            </header>
+
+            <form id="age-form">
+                <label for="birthdate">วัน-เดือน-ปีเกิด</label>
+                <input id="birthdate" name="birthdate" type="date" required aria-describedby="birthdate-hint">
+                <p id="birthdate-hint" class="visually-hidden">กรุณาเลือกวันเกิดของคุณ (ห้ามเป็นวันที่ในอนาคต)</p>
+            </form>
+
+            <div class="error-message" role="alert" id="error-area"></div>
+
+            <section class="actions" aria-label="เครื่องมือคำนวณ">
+                <button type="button" class="primary" id="calculate-btn">คำนวณ</button>
+                <button type="button" class="neutral" id="reset-btn">ล้างค่า</button>
+                <button type="button" class="secondary" id="copy-btn" disabled>คัดลอกผลลัพธ์</button>
+                <button type="button" class="secondary" id="save-btn" disabled>บันทึกเป็น .txt</button>
+                <button type="button" class="secondary" id="print-btn">พิมพ์หน้า</button>
+            </section>
+
+            <section class="result-card" aria-live="polite" aria-atomic="true" id="results" hidden>
+                <h2 class="result-title">ผลลัพธ์การคำนวณ</h2>
+                <dl>
+                    <dt>อายุปัจจุบัน</dt>
+                    <dd id="age-output">-</dd>
+                    <dt>วันเกิดครั้งถัดไป</dt>
+                    <dd id="next-birthday-output">-</dd>
+                    <dt>นับถอยหลัง</dt>
+                    <dd id="countdown-output">-</dd>
+                </dl>
+                <div class="badge" id="leap-note" hidden>เกิดวันที่ 29 กุมภาพันธ์</div>
+            </section>
+        </article>
+    </main>
+
+    <style>
+        /* ซ่อนข้อความช่วยเหลือจากการแสดงผลปกติ แต่ยังคงให้โปรแกรมอ่านหน้าจอเข้าถึงได้ */
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+
+    <script>
+        // ฟังก์ชันช่วยคำนวณจำนวนวันในแต่ละเดือน
+        function daysInMonth(year, monthIndex) {
+            return new Date(year, monthIndex + 1, 0).getDate();
+        }
+
+        // ตรวจสอบปีอธิกสุรทิน (Leap Year) เพื่อรองรับผู้ที่เกิดวันที่ 29 ก.พ.
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
+        }
+
+        const birthdateInput = document.getElementById('birthdate');
+        const errorArea = document.getElementById('error-area');
+        const resultCard = document.getElementById('results');
+        const ageOutput = document.getElementById('age-output');
+        const nextBirthdayOutput = document.getElementById('next-birthday-output');
+        const countdownOutput = document.getElementById('countdown-output');
+        const leapNote = document.getElementById('leap-note');
+
+        const calculateBtn = document.getElementById('calculate-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const copyBtn = document.getElementById('copy-btn');
+        const saveBtn = document.getElementById('save-btn');
+        const printBtn = document.getElementById('print-btn');
+
+        let lastResultText = '';
+
+        // ตั้งค่าสูงสุดของตัวเลือกวันเกิดให้เป็นวันนี้ เพื่อกันการเลือกวันที่ในอนาคต
+        (function setMaxDate() {
+            const today = new Date();
+            const maxDate = today.toISOString().split('T')[0];
+            birthdateInput.max = maxDate;
+        })();
+
+        // เมื่อกดปุ่มคำนวณ ให้ตรวจสอบและคำนวณผลลัพธ์
+        calculateBtn.addEventListener('click', () => {
+            if (!birthdateInput.value) {
+                showError('กรุณาเลือกวันเกิดก่อนคำนวณ');
+                return;
+            }
+
+            const birthDate = new Date(birthdateInput.value + 'T00:00:00');
+            const today = new Date();
+
+            if (birthDate > today) {
+                showError('ไม่สามารถเลือกวันที่ในอนาคตได้ กรุณาเลือกใหม่');
+                return;
+            }
+
+            hideError();
+
+            const ageText = formatAgeDifference(birthDate, today);
+            const { nextBirthday, daysUntil, adjustedForLeap } = findNextBirthday(birthDate, today);
+            const nextBirthdayText = nextBirthday.toLocaleDateString('th-TH', { dateStyle: 'full' });
+            const countdownText = daysUntil === 0 ? 'วันนี้คือวันเกิดของคุณ! 🎉' : `เหลืออีก ${daysUntil.toLocaleString('th-TH')} วัน`;
+
+            ageOutput.textContent = ageText;
+            nextBirthdayOutput.textContent = nextBirthdayText;
+            countdownOutput.textContent = countdownText;
+            leapNote.hidden = !adjustedForLeap;
+
+            lastResultText = `อายุปัจจุบัน: ${ageText}\nวันเกิดครั้งถัดไป: ${nextBirthdayText}\nนับถอยหลัง: ${countdownText}`;
+
+            resultCard.hidden = false;
+            copyBtn.disabled = false;
+            saveBtn.disabled = false;
+        });
+
+        // ล้างค่าทั้งหมดและซ่อนผลลัพธ์
+        resetBtn.addEventListener('click', () => {
+            birthdateInput.value = '';
+            resultCard.hidden = true;
+            copyBtn.disabled = true;
+            saveBtn.disabled = true;
+            hideError();
+            lastResultText = '';
+            birthdateInput.focus();
+        });
+
+        // คัดลอกผลลัพธ์ไปยังคลิปบอร์ด พร้อมแจ้งผลด้วยข้อความเตือนผู้ใช้
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(lastResultText);
+                showTemporaryMessage(copyBtn, 'คัดลอกแล้ว!');
+            } catch (error) {
+                showError('ไม่สามารถคัดลอกอัตโนมัติได้ กรุณาคัดลอกเอง');
             }
         });
+
+        // บันทึกผลลัพธ์เป็นไฟล์ .txt โดยใช้ Blob และสร้างลิงก์ดาวน์โหลดชั่วคราว
+        saveBtn.addEventListener('click', () => {
+            const blob = new Blob([lastResultText], { type: 'text/plain;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            const today = new Date().toISOString().split('T')[0];
+            link.download = `age-result-${today}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        });
+
+        // พิมพ์หน้าด้วยคำสั่งของเบราว์เซอร์
+        printBtn.addEventListener('click', () => {
+            window.print();
+        });
+
+        // ฟังก์ชันแสดงข้อความผิดพลาดที่เป็นมิตรกับผู้ใช้
+        function showError(message) {
+            errorArea.textContent = message;
+            errorArea.style.display = 'block';
+        }
+
+        function hideError() {
+            errorArea.textContent = '';
+            errorArea.style.display = 'none';
+        }
+
+        // แสดงข้อความสำเร็จชั่วคราวบนปุ่ม (เช่นหลังคัดลอก)
+        function showTemporaryMessage(button, message) {
+            const originalText = button.textContent;
+            button.textContent = message;
+            button.disabled = true;
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+            }, 1500);
+        }
+
+        // จัดรูปแบบอายุเป็น ปี เดือน วัน โดยคำนวณจากโซนเวลาเครื่องผู้ใช้
+        function formatAgeDifference(birthDate, today) {
+            let years = today.getFullYear() - birthDate.getFullYear();
+            let months = today.getMonth() - birthDate.getMonth();
+            let days = today.getDate() - birthDate.getDate();
+
+            if (days < 0) {
+                const prevMonthIndex = (today.getMonth() - 1 + 12) % 12;
+                const prevMonthYear = prevMonthIndex === 11 ? today.getFullYear() - 1 : today.getFullYear();
+                days += daysInMonth(prevMonthYear, prevMonthIndex);
+                months -= 1;
+            }
+
+            if (months < 0) {
+                months += 12;
+                years -= 1;
+            }
+
+            return `${years.toLocaleString('th-TH')} ปี ${months.toLocaleString('th-TH')} เดือน ${days.toLocaleString('th-TH')} วัน`;
+        }
+
+        // หาและคืนค่าข้อมูลของวันเกิดครั้งถัดไป รวมทั้งจำนวนวันนับถอยหลัง
+        function findNextBirthday(birthDate, today) {
+            const birthMonth = birthDate.getMonth();
+            const birthDay = birthDate.getDate();
+            let nextBirthdayYear = today.getFullYear();
+            let adjustedForLeap = false;
+
+            const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            let candidate = new Date(nextBirthdayYear, birthMonth, birthDay);
+
+            if (birthMonth === 1 && birthDay === 29 && !isLeapYear(nextBirthdayYear)) {
+                // หากปีนี้ไม่ใช่อธิกสุรทิน ให้ถือว่าวันเกิดคือ 28 ก.พ.
+                candidate = new Date(nextBirthdayYear, 1, 28);
+                adjustedForLeap = true;
+            }
+
+            if (candidate < todayMidnight) {
+                nextBirthdayYear += 1;
+                candidate = new Date(nextBirthdayYear, birthMonth, birthDay);
+                adjustedForLeap = false;
+
+                if (birthMonth === 1 && birthDay === 29 && !isLeapYear(nextBirthdayYear)) {
+                    candidate = new Date(nextBirthdayYear, 1, 28);
+                    adjustedForLeap = true;
+                }
+            }
+
+            const candidateMidnight = new Date(candidate.getFullYear(), candidate.getMonth(), candidate.getDate());
+            const diffTime = candidateMidnight - todayMidnight;
+            const daysUntil = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+            return { nextBirthday: candidateMidnight, daysUntil, adjustedForLeap };
+        }
     </script>
 </body>
 </html>
