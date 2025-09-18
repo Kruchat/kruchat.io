@@ -1,0 +1,129 @@
+-- Create tables
+CREATE TABLE "Role" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE "User" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "email" TEXT NOT NULL UNIQUE,
+    "passwordHash" TEXT NOT NULL,
+    "displayName" TEXT NOT NULL,
+    "roleId" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("roleId") REFERENCES "Role" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE "YearlyGoal" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "userId" INTEGER NOT NULL,
+    "year" INTEGER NOT NULL,
+    "targetHours" REAL NOT NULL,
+    "notes" TEXT,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "YearlyGoal_userId_year_unique" UNIQUE ("userId", "year"),
+    FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE "Activity" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "activityType" TEXT NOT NULL,
+    "provider" TEXT,
+    "activityDate" DATETIME NOT NULL,
+    "hours" REAL NOT NULL,
+    "reflection" TEXT,
+    "status" TEXT NOT NULL DEFAULT 'DRAFT',
+    "ownerId" INTEGER NOT NULL,
+    "reviewerId" INTEGER,
+    "goalId" INTEGER,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("ownerId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    FOREIGN KEY ("reviewerId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+    FOREIGN KEY ("goalId") REFERENCES "YearlyGoal" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE "Tag" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE "ActivityTag" (
+    "activityId" INTEGER NOT NULL,
+    "tagId" INTEGER NOT NULL,
+    PRIMARY KEY ("activityId", "tagId"),
+    FOREIGN KEY ("activityId") REFERENCES "Activity" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("tagId") REFERENCES "Tag" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE "ActivityStatusHistory" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "activityId" INTEGER NOT NULL,
+    "status" TEXT NOT NULL,
+    "comment" TEXT,
+    "changedById" INTEGER,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("activityId") REFERENCES "Activity" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("changedById") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+CREATE TABLE "ActivityComment" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "activityId" INTEGER NOT NULL,
+    "authorId" INTEGER NOT NULL,
+    "body" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("activityId") REFERENCES "Activity" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+CREATE TABLE "EvidenceMetadata" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "activityId" INTEGER NOT NULL UNIQUE,
+    "fileName" TEXT NOT NULL,
+    "filePath" TEXT NOT NULL,
+    "mimeType" TEXT,
+    "uploadedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY ("activityId") REFERENCES "Activity" ("id") ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE "RubricConfiguration" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" TEXT NOT NULL,
+    "description" TEXT,
+    "weight" REAL NOT NULL,
+    "active" INTEGER NOT NULL DEFAULT 1,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER update_User_updatedAt
+AFTER UPDATE ON "User"
+FOR EACH ROW
+BEGIN
+    UPDATE "User" SET "updatedAt" = CURRENT_TIMESTAMP WHERE "id" = NEW."id";
+END;
+
+CREATE TRIGGER update_RubricConfiguration_updatedAt
+AFTER UPDATE ON "RubricConfiguration"
+FOR EACH ROW
+BEGIN
+    UPDATE "RubricConfiguration" SET "updatedAt" = CURRENT_TIMESTAMP WHERE "id" = NEW."id";
+END;
+
+CREATE TRIGGER update_Activity_updatedAt
+AFTER UPDATE ON "Activity"
+FOR EACH ROW
+BEGIN
+    UPDATE "Activity" SET "updatedAt" = CURRENT_TIMESTAMP WHERE "id" = NEW."id";
+END;
+
+CREATE TRIGGER update_YearlyGoal_updatedAt
+AFTER UPDATE ON "YearlyGoal"
+FOR EACH ROW
+BEGIN
+    UPDATE "YearlyGoal" SET "updatedAt" = CURRENT_TIMESTAMP WHERE "id" = NEW."id";
+END;

@@ -1,0 +1,6 @@
+/node_modules
+/dist
+/.turbo
+/.pnpm-store
+/src-tauri/target
+.DS_Store

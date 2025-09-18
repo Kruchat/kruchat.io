@@ -1,0 +1,215 @@
+:root {
+  color-scheme: light dark;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background-color: #0f172a;
+  color: #f8fafc;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #1e293b, #0f172a 60%);
+}
+
+.layout {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(15, 23, 42, 0.6);
+  padding: 1.5rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.4);
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.8);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 20px 50px rgba(8, 14, 29, 0.55);
+}
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.card label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+}
+
+button {
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  color: #0f172a;
+  font-weight: 700;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.4);
+}
+
+button.ghost {
+  background: transparent;
+  color: inherit;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+button.primary {
+  background: linear-gradient(135deg, #34d399, #22d3ee);
+}
+
+.muted {
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tags span {
+  background: rgba(59, 130, 246, 0.2);
+  border-radius: 999px;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.history ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.history li {
+  background: rgba(15, 23, 42, 0.6);
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.history small {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  color: rgba(148, 163, 184, 0.7);
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.status-draft {
+  background: rgba(148, 163, 184, 0.2);
+}
+
+.status-submitted {
+  background: rgba(59, 130, 246, 0.25);
+}
+
+.status-approved {
+  background: rgba(34, 197, 94, 0.25);
+}
+
+.status-rejected {
+  background: rgba(239, 68, 68, 0.25);
+}
+
+.error {
+  color: #fca5a5;
+}
+
+.notice {
+  background: rgba(34, 211, 238, 0.15);
+  padding: 1rem 1.5rem;
+  border-radius: 0.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.activity header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.activity .reflection {
+  font-style: italic;
+}
+
+.hint {
+  color: rgba(148, 163, 184, 0.7);
+  font-size: 0.85rem;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
