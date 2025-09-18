@@ -1,0 +1,13 @@
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+dist
+.vite
+target
+.DS_Store
+src-tauri/target
+src-tauri/gen
+src-tauri/icons
+.idea
+.env*

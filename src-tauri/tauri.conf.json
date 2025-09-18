@@ -1,0 +1,48 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "package": {
+    "productName": "Teacher Self-Development Log",
+    "version": "0.1.0"
+  },
+  "build": {
+    "beforeBuildCommand": "pnpm run build",
+    "beforeDevCommand": "pnpm run dev",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist"
+  },
+  "tauri": {
+    "identifier": "io.kruchat.teacher-self-development-log",
+    "windows": [
+      {
+        "title": "Teacher Self-Development Log",
+        "width": 1280,
+        "height": 800,
+        "resizable": true,
+        "fullscreen": false,
+        "decorations": true
+      }
+    ],
+    "allowlist": {
+      "all": false,
+      "fs": {
+        "all": false,
+        "scope": [
+          "$APPDATA/TeacherSelfDevelopmentLog/**",
+          "$APPDIR/**"
+        ]
+      },
+      "shell": {
+        "open": true
+      }
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "icon": [],
+      "identifier": "io.kruchat.teacher-self-development-log"
+    },
+    "security": {
+      "csp": null
+    }
+  }
+}

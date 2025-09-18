@@ -1,0 +1,32 @@
+{
+  "name": "teacher-self-development-log",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.4",
+    "chart.js": "^4.4.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.5.15",
+    "@types/react": "^18.3.8",
+    "@types/react-dom": "^18.3.2",
+    "@types/node": "^22.7.5",
+    "@vitejs/plugin-react": "^4.3.2",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14",
+    "daisyui": "^4.12.10",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8"
+  }
+}
