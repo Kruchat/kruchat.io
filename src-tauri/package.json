@@ -1,0 +1,22 @@
+{
+  "name": "kruchat-io-backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prisma": "prisma",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:generate": "prisma generate",
+    "prisma:seed": "prisma db seed"
+  },
+  "devDependencies": {
+    "prisma": "^5.9.1",
+    "tsx": "^4.7.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.9.1",
+    "bcryptjs": "^2.4.3"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}

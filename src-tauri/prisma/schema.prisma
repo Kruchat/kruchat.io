@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum RoleName {
+  TEACHER
+  SUPERVISOR
+  ADMIN
+}
+
+enum ActivityType {
+  SERVICE
+  PROFESSIONAL_DEVELOPMENT
+  COMMUNITY
+  OTHER
+}
+
+enum ActivityStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleName @unique
+  users User[]
+}
+
+model User {
+  id            Int              @id @default(autoincrement())
+  email         String           @unique
+  passwordHash  String
+  displayName   String
+  roleId        Int
+  role          Role             @relation(fields: [roleId], references: [id])
+  activities    Activity[]       @relation("UserActivities")
+  reviews       Activity[]       @relation("ActivityReviewer")
+  comments      ActivityComment[]
+  statusEntries ActivityStatusHistory[]
+  goals         YearlyGoal[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Activity {
+  id             Int                     @id @default(autoincrement())
+  title          String
+  activityType   ActivityType
+  provider       String?
+  activityDate   DateTime
+  hours          Float
+  reflection     String?
+  status         ActivityStatus          @default(DRAFT)
+  ownerId        Int
+  owner          User                    @relation("UserActivities", fields: [ownerId], references: [id])
+  reviewerId     Int?
+  reviewer       User?                   @relation("ActivityReviewer", fields: [reviewerId], references: [id])
+  tags           ActivityTag[]
+  statusHistory  ActivityStatusHistory[]
+  comments       ActivityComment[]
+  evidence       EvidenceMetadata?
+  goalId         Int?
+  goal           YearlyGoal?             @relation(fields: [goalId], references: [id])
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+}
+
+model ActivityTag {
+  activity   Activity @relation(fields: [activityId], references: [id])
+  activityId Int
+  tag        Tag      @relation(fields: [tagId], references: [id])
+  tagId      Int
+
+  @@id([activityId, tagId])
+}
+
+model Tag {
+  id        Int           @id @default(autoincrement())
+  name      String        @unique
+  activities ActivityTag[]
+}
+
+model ActivityStatusHistory {
+  id         Int            @id @default(autoincrement())
+  activity   Activity       @relation(fields: [activityId], references: [id])
+  activityId Int
+  status     ActivityStatus
+  comment    String?
+  changedBy  User?          @relation(fields: [changedById], references: [id])
+  changedById Int?
+  createdAt  DateTime       @default(now())
+}
+
+model ActivityComment {
+  id         Int       @id @default(autoincrement())
+  activity   Activity  @relation(fields: [activityId], references: [id])
+  activityId Int
+  author     User      @relation(fields: [authorId], references: [id])
+  authorId   Int
+  body       String
+  createdAt  DateTime  @default(now())
+}
+
+model YearlyGoal {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  year       Int
+  targetHours Float
+  notes      String?
+  activities Activity[]
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@unique([userId, year])
+}
+
+model EvidenceMetadata {
+  id          Int      @id @default(autoincrement())
+  activity    Activity @relation(fields: [activityId], references: [id])
+  activityId  Int      @unique
+  fileName    String
+  filePath    String
+  mimeType    String?
+  uploadedAt  DateTime @default(now())
+}
+
+model RubricConfiguration {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  weight      Float
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
