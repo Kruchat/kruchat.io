@@ -1,103 +1,321 @@
 <!DOCTYPE html>
-<html lang="th" data-theme="light">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบจัดการข้อมูล - หน้าหลัก</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>ระบบบันทึกการพัฒนาตนเอง</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gray-100">
-    <div id="menu-container"></div>
-
-    <div class="main-container">
-        <div class="chat-container">
-            <div class="chat-messages" id="chatMessages">
-                <div class="chat chat-start">
-                    <div class="chat-image avatar">
-                        <div class="w-10 rounded-full">
-                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                        </div>
-                    </div>
-                    <div class="chat-header">
-                        ระบบ
-                        <time class="text-xs opacity-50">เริ่มต้น</time>
-                    </div>
-                    <div class="chat-bubble">ยินดีต้อนรับสู่หน้าหลัก!</div>
-                    <div class="chat-footer opacity-50">เริ่มใช้งาน</div>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-seedling"></i> ระบบบันทึกการพัฒนาตนเอง</h1>
+                <div class="user-info">
+                    <span id="currentDate"></span>
                 </div>
             </div>
-            <div class="chat-input">
-                <div class="flex gap-2">
-                    <input type="text" id="searchInput" class="flex-1 input input-bordered w-full" placeholder="พิมพ์คำสั่ง...">
-                    <button onclick="processCommand()" class="btn btn-primary">ส่ง</button>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-tachometer-alt"></i> แดชบอร์ด
+            </button>
+            <button class="nav-tab" data-tab="goals">
+                <i class="fas fa-bullseye"></i> เป้าหมาย
+            </button>
+            <button class="nav-tab" data-tab="habits">
+                <i class="fas fa-calendar-check"></i> นิสัย
+            </button>
+            <button class="nav-tab" data-tab="skills">
+                <i class="fas fa-graduation-cap"></i> ทักษะ
+            </button>
+            <button class="nav-tab" data-tab="progress">
+                <i class="fas fa-chart-line"></i> ความก้าวหน้า
+            </button>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div class="tab-content active" id="dashboard">
+                <div class="dashboard-grid">
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3 id="activeGoals">0</h3>
+                            <p>เป้าหมายที่กำลังดำเนินการ</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3 id="streakDays">0</h3>
+                            <p>วันติดต่อกัน</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3 id="completedTasks">0</h3>
+                            <p>งานที่เสร็จสิ้นวันนี้</p>
+                        </div>
+                    </div>
+                    <div class="stats-card">
+                        <div class="stats-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stats-info">
+                            <h3 id="totalAchievements">0</h3>
+                            <p>ความสำเร็จทั้งหมด</p>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="dashboard-sections">
+                    <div class="section">
+                        <h2><i class="fas fa-tasks"></i> งานวันนี้</h2>
+                        <div class="today-tasks" id="todayTasks">
+                            <!-- Today's tasks will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2><i class="fas fa-chart-pie"></i> สรุปความก้าวหน้า</h2>
+                        <div class="progress-summary">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div class="tab-content" id="goals">
+                <div class="section-header">
+                    <h2><i class="fas fa-bullseye"></i> จัดการเป้าหมาย</h2>
+                    <button class="btn btn-primary" id="addGoalBtn">
+                        <i class="fas fa-plus"></i> เพิ่มเป้าหมายใหม่
+                    </button>
+                </div>
+
+                <div class="goals-container" id="goalsContainer">
+                    <!-- Goals will be populated here -->
+                </div>
+            </div>
+
+            <!-- Habits Tab -->
+            <div class="tab-content" id="habits">
+                <div class="section-header">
+                    <h2><i class="fas fa-calendar-check"></i> ติดตามนิสัย</h2>
+                    <button class="btn btn-primary" id="addHabitBtn">
+                        <i class="fas fa-plus"></i> เพิ่มนิสัยใหม่
+                    </button>
+                </div>
+
+                <div class="habits-container" id="habitsContainer">
+                    <!-- Habits will be populated here -->
+                </div>
+
+                <div class="calendar-section">
+                    <h3><i class="fas fa-calendar-alt"></i> ปฏิทินนิสัย</h3>
+                    <div class="calendar" id="habitCalendar">
+                        <!-- Calendar will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Tab -->
+            <div class="tab-content" id="skills">
+                <div class="section-header">
+                    <h2><i class="fas fa-graduation-cap"></i> พัฒนาทักษะ</h2>
+                    <button class="btn btn-primary" id="addSkillBtn">
+                        <i class="fas fa-plus"></i> เพิ่มทักษะใหม่
+                    </button>
+                </div>
+
+                <div class="skills-container" id="skillsContainer">
+                    <!-- Skills will be populated here -->
+                </div>
+            </div>
+
+            <!-- Progress Tab -->
+            <div class="tab-content" id="progress">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> วิเคราะห์ความก้าวหน้า</h2>
+                </div>
+
+                <div class="progress-charts">
+                    <div class="chart-container">
+                        <h3>ความก้าวหน้าเป้าหมาย</h3>
+                        <canvas id="goalsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>สถิตินิสัย</h3>
+                        <canvas id="habitsChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <h3>การพัฒนาทักษะ</h3>
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Goal Modal -->
+    <div class="modal" id="goalModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="goalModalTitle">เพิ่มเป้าหมายใหม่</h3>
+                <span class="close" id="closeGoalModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="goalForm">
+                    <div class="form-group">
+                        <label for="goalTitle">ชื่อเป้าหมาย</label>
+                        <input type="text" id="goalTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalDescription">รายละเอียด</label>
+                        <textarea id="goalDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalCategory">หมวดหมู่</label>
+                        <select id="goalCategory">
+                            <option value="health">สุขภาพ</option>
+                            <option value="career">อาชีพ</option>
+                            <option value="education">การศึกษา</option>
+                            <option value="personal">ส่วนตัว</option>
+                            <option value="financial">การเงิน</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalDeadline">วันที่เป้าหมาย</label>
+                        <input type="date" id="goalDeadline" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="goalPriority">ความสำคัญ</label>
+                        <select id="goalPriority">
+                            <option value="low">ต่ำ</option>
+                            <option value="medium">ปานกลาง</option>
+                            <option value="high">สูง</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelGoal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Habit Modal -->
+    <div class="modal" id="habitModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="habitModalTitle">เพิ่มนิสัยใหม่</h3>
+                <span class="close" id="closeHabitModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="habitForm">
+                    <div class="form-group">
+                        <label for="habitName">ชื่อนิสัย</label>
+                        <input type="text" id="habitName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="habitDescription">รายละเอียด</label>
+                        <textarea id="habitDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="habitCategory">หมวดหมู่</label>
+                        <select id="habitCategory">
+                            <option value="health">สุขภาพ</option>
+                            <option value="productivity">ประสิทธิภาพ</option>
+                            <option value="learning">การเรียนรู้</option>
+                            <option value="mindfulness">สติ</option>
+                            <option value="social">สังคม</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="habitFrequency">ความถี่</label>
+                        <select id="habitFrequency">
+                            <option value="daily">ทุกวัน</option>
+                            <option value="weekly">ทุกสัปดาห์</option>
+                            <option value="monthly">ทุกเดือน</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="habitTarget">เป้าหมาย (ครั้ง/สัปดาห์)</label>
+                        <input type="number" id="habitTarget" min="1" max="7" value="7">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelHabit">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Modal -->
+    <div class="modal" id="skillModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="skillModalTitle">เพิ่มทักษะใหม่</h3>
+                <span class="close" id="closeSkillModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="skillForm">
+                    <div class="form-group">
+                        <label for="skillName">ชื่อทักษะ</label>
+                        <input type="text" id="skillName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillDescription">รายละเอียด</label>
+                        <textarea id="skillDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillCategory">หมวดหมู่</label>
+                        <select id="skillCategory">
+                            <option value="technical">เทคนิค</option>
+                            <option value="soft">ทักษะอ่อน</option>
+                            <option value="language">ภาษา</option>
+                            <option value="creative">ความคิดสร้างสรรค์</option>
+                            <option value="physical">ร่างกาย</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillCurrentLevel">ระดับปัจจุบัน (1-10)</label>
+                        <input type="range" id="skillCurrentLevel" min="1" max="10" value="1">
+                        <span id="skillCurrentLevelValue">1</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="skillTargetLevel">ระดับเป้าหมาย (1-10)</label>
+                        <input type="range" id="skillTargetLevel" min="1" max="10" value="5">
+                        <span id="skillTargetLevelValue">5</span>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancelSkill">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary">บันทึก</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        checkLogin();
-
-        fetch('menu.html')
-            .then(response => {
-                if (!response.ok) throw new Error('Failed to load menu.html');
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('menu-container').innerHTML = data;
-                console.log('Menu loaded successfully');
-            })
-            .catch(error => console.error('Error loading menu:', error));
-
-        function addMessage(content, isUser = false) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat ${isUser ? 'chat-end' : 'chat-start'}`;
-            
-            messageDiv.innerHTML = `
-                <div class="chat-image avatar">
-                    <div class="w-10 rounded-full">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                    </div>
-                </div>
-                <div class="chat-header">
-                    ${isUser ? 'คุณ' : 'ระบบ'}
-                    <time class="text-xs opacity-50">${new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</time>
-                </div>
-                <div class="chat-bubble ${isUser ? 'bg-primary text-white' : ''}">${content}</div>
-                <div class="chat-footer opacity-50">${isUser ? 'ส่งแล้ว' : 'ตอบกลับ'}</div>
-            `;
-            
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function processCommand() {
-            const input = document.getElementById('searchInput').value.trim().toLowerCase();
-            if (!input) return;
-
-            addMessage(input, true);
-
-            if (input === "ไปที่ข้อมูลนักเรียน") {
-                window.location.href = "students.html";
-            } else if (input === "ไปที่คลังเอกสาร") {
-                window.location.href = "documents.html";
-            } else {
-                addMessage("คำสั่งไม่ถูกต้อง กรุณาลองใหม่ หรือใช้เมนูด้านบน");
-            }
-
-            document.getElementById('searchInput').value = '';
-        }
-
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                processCommand();
-            }
-        });
-    </script>
+    <script src="script-additional.js"></script>
 </body>
 </html>
