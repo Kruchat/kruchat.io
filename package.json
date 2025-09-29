@@ -1,0 +1,19 @@
+{
+  "name": "teacher-document-system",
+  "version": "1.0.0",
+  "description": "ระบบเก็บไฟล์เอกสารคุณครู - Teacher Document Management System",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": ["document-management", "teacher", "education", "file-storage"],
+  "author": "Teacher Document System",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
