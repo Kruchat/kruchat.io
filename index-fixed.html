@@ -37,6 +37,9 @@
             <button class="nav-tab" data-tab="progress">
                 <i class="fas fa-chart-line"></i> ความก้าวหน้า
             </button>
+            <button class="nav-tab" data-tab="settings">
+                <i class="fas fa-cog"></i> ตั้งค่า
+            </button>
         </nav>
 
         <!-- Main Content -->
@@ -89,13 +92,6 @@
                             <!-- Today's tasks will be populated here -->
                         </div>
                     </div>
-
-                    <div class="section">
-                        <h2><i class="fas fa-chart-pie"></i> สรุปความก้าวหน้า</h2>
-                        <div class="progress-summary">
-                            <canvas id="progressChart"></canvas>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -125,13 +121,6 @@
                 <div class="habits-container" id="habitsContainer">
                     <!-- Habits will be populated here -->
                 </div>
-
-                <div class="calendar-section">
-                    <h3><i class="fas fa-calendar-alt"></i> ปฏิทินนิสัย</h3>
-                    <div class="calendar" id="habitCalendar">
-                        <!-- Calendar will be populated here -->
-                    </div>
-                </div>
             </div>
 
             <!-- Skills Tab -->
@@ -152,6 +141,14 @@
             <div class="tab-content" id="progress">
                 <div class="section-header">
                     <h2><i class="fas fa-chart-line"></i> วิเคราะห์ความก้าวหน้า</h2>
+                    <div class="progress-actions">
+                        <button class="btn btn-secondary" id="exportDataBtn">
+                            <i class="fas fa-download"></i> ส่งออกข้อมูล
+                        </button>
+                        <button class="btn btn-secondary" id="importDataBtn">
+                            <i class="fas fa-upload"></i> นำเข้าข้อมูล
+                        </button>
+                    </div>
                 </div>
 
                 <div class="progress-charts">
@@ -160,7 +157,7 @@
                         <canvas id="goalsChart"></canvas>
                     </div>
                     <div class="chart-container">
-                        <h3>สถิตินิสัย</h3>
+                        <h3>สถิตินิสัย 7 วันล่าสุด</h3>
                         <canvas id="habitsChart"></canvas>
                     </div>
                     <div class="chart-container">
@@ -168,11 +165,103 @@
                         <canvas id="skillsChart"></canvas>
                     </div>
                 </div>
+
+                <div class="progress-summary">
+                    <div class="summary-card">
+                        <h3><i class="fas fa-calendar-alt"></i> สรุปรายสัปดาห์</h3>
+                        <div id="weeklySummary"></div>
+                    </div>
+                    <div class="summary-card">
+                        <h3><i class="fas fa-trophy"></i> ความสำเร็จล่าสุด</h3>
+                        <div id="recentAchievements"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="settings">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> ตั้งค่าระบบ</h2>
+                </div>
+
+                <div class="settings-container">
+                    <div class="settings-section">
+                        <h3><i class="fas fa-bell"></i> การแจ้งเตือน</h3>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" id="enableNotifications" checked>
+                                เปิดใช้งานการแจ้งเตือน
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                เวลาแจ้งเตือนนิสัย:
+                                <input type="time" id="habitReminderTime" value="09:00">
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                เวลาแจ้งเตือนเป้าหมาย:
+                                <input type="time" id="goalReminderTime" value="18:00">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-palette"></i> ธีมและสี</h3>
+                        <div class="setting-item">
+                            <label>
+                                โหมดธีม:
+                                <select id="themeMode">
+                                    <option value="light">สว่าง</option>
+                                    <option value="dark">มืด</option>
+                                    <option value="auto">อัตโนมัติ</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                สีหลัก:
+                                <input type="color" id="primaryColor" value="#667eea">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-database"></i> การจัดการข้อมูล</h3>
+                        <div class="setting-item">
+                            <button class="btn btn-secondary" id="backupDataBtn">
+                                <i class="fas fa-save"></i> สำรองข้อมูล
+                            </button>
+                            <button class="btn btn-secondary" id="restoreDataBtn">
+                                <i class="fas fa-undo"></i> กู้คืนข้อมูล
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <button class="btn btn-danger" id="clearAllDataBtn">
+                                <i class="fas fa-trash"></i> ลบข้อมูลทั้งหมด
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-info-circle"></i> เกี่ยวกับ</h3>
+                        <div class="setting-item">
+                            <p>เวอร์ชัน: 2.0.0</p>
+                            <p>อัปเดตล่าสุด: <span id="lastUpdate"></span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <!-- Modals -->
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- File Input for Import -->
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
     <!-- Goal Modal -->
     <div class="modal" id="goalModal">
         <div class="modal-content">
@@ -249,14 +338,6 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="habitFrequency">ความถี่</label>
-                        <select id="habitFrequency">
-                            <option value="daily">ทุกวัน</option>
-                            <option value="weekly">ทุกสัปดาห์</option>
-                            <option value="monthly">ทุกเดือน</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
                         <label for="habitTarget">เป้าหมาย (ครั้ง/สัปดาห์)</label>
                         <input type="number" id="habitTarget" min="1" max="7" value="7">
                     </div>
@@ -316,5 +397,6 @@
     </div>
 
     <script src="script-complete.js"></script>
+    <script src="script-enhanced.js"></script>
 </body>
 </html>
