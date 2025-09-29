@@ -34,9 +34,6 @@
             <button class="nav-tab" data-tab="skills">
                 <i class="fas fa-graduation-cap"></i> ทักษะ
             </button>
-            <button class="nav-tab" data-tab="progress">
-                <i class="fas fa-chart-line"></i> ความก้าวหน้า
-            </button>
         </nav>
 
         <!-- Main Content -->
@@ -89,13 +86,6 @@
                             <!-- Today's tasks will be populated here -->
                         </div>
                     </div>
-
-                    <div class="section">
-                        <h2><i class="fas fa-chart-pie"></i> สรุปความก้าวหน้า</h2>
-                        <div class="progress-summary">
-                            <canvas id="progressChart"></canvas>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -125,13 +115,6 @@
                 <div class="habits-container" id="habitsContainer">
                     <!-- Habits will be populated here -->
                 </div>
-
-                <div class="calendar-section">
-                    <h3><i class="fas fa-calendar-alt"></i> ปฏิทินนิสัย</h3>
-                    <div class="calendar" id="habitCalendar">
-                        <!-- Calendar will be populated here -->
-                    </div>
-                </div>
             </div>
 
             <!-- Skills Tab -->
@@ -147,32 +130,9 @@
                     <!-- Skills will be populated here -->
                 </div>
             </div>
-
-            <!-- Progress Tab -->
-            <div class="tab-content" id="progress">
-                <div class="section-header">
-                    <h2><i class="fas fa-chart-line"></i> วิเคราะห์ความก้าวหน้า</h2>
-                </div>
-
-                <div class="progress-charts">
-                    <div class="chart-container">
-                        <h3>ความก้าวหน้าเป้าหมาย</h3>
-                        <canvas id="goalsChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>สถิตินิสัย</h3>
-                        <canvas id="habitsChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <h3>การพัฒนาทักษะ</h3>
-                        <canvas id="skillsChart"></canvas>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 
-    <!-- Modals -->
     <!-- Goal Modal -->
     <div class="modal" id="goalModal">
         <div class="modal-content">
@@ -246,14 +206,6 @@
                             <option value="learning">การเรียนรู้</option>
                             <option value="mindfulness">สติ</option>
                             <option value="social">สังคม</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="habitFrequency">ความถี่</label>
-                        <select id="habitFrequency">
-                            <option value="daily">ทุกวัน</option>
-                            <option value="weekly">ทุกสัปดาห์</option>
-                            <option value="monthly">ทุกเดือน</option>
                         </select>
                     </div>
                     <div class="form-group">
