@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ทำเนียบครู | โรงเรียนตัวอย่าง</title>
+    <meta name="description" content="ทำเนียบครู โรงเรียนตัวอย่าง ค้นหาครู แผนก และรายวิชา พร้อมโหมดมืด" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <style>
+      /* ---------- CSS Variables & Theme ---------- */
+      :root {
+        --bg: #f7f7fb;
+        --surface: #ffffff;
+        --text: #1f2328;
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --accent: #4f46e5;
+        --accent-contrast: #ffffff;
+        --chip-bg: #eef2ff;
+        --chip-text: #3730a3;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 10px;
+        --header-gradient: radial-gradient(1200px 400px at 10% -10%, #e0e7ff 0%, rgba(224, 231, 255, 0) 60%),
+          radial-gradient(1000px 300px at 90% -20%, #f5d0fe 0%, rgba(245, 208, 254, 0) 70%);
+      }
+
+      :root[data-theme="dark"] {
+        --bg: #0b1020;
+        --surface: #0f172a;
+        --text: #e5e7eb;
+        --muted: #a1a1aa;
+        --border: #1f2937;
+        --accent: #818cf8;
+        --accent-contrast: #0f172a;
+        --chip-bg: #1f2546;
+        --chip-text: #c7d2fe;
+        --shadow: 0 10px 24px rgba(2, 6, 23, 0.6);
+        --header-gradient: radial-gradient(1200px 400px at 10% -10%, rgba(80, 72, 229, 0.25) 0%, rgba(80, 72, 229, 0) 60%),
+          radial-gradient(1000px 300px at 90% -20%, rgba(245, 208, 254, 0.15) 0%, rgba(245, 208, 254, 0) 70%);
+      }
+
+      /* Fallback to system theme if not set */
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme]) {
+          --bg: #0b1020;
+          --surface: #0f172a;
+          --text: #e5e7eb;
+          --muted: #a1a1aa;
+          --border: #1f2937;
+          --accent: #818cf8;
+          --accent-contrast: #0f172a;
+          --chip-bg: #1f2546;
+          --chip-text: #c7d2fe;
+          --shadow: 0 10px 24px rgba(2, 6, 23, 0.6);
+          --header-gradient: radial-gradient(1200px 400px at 10% -10%, rgba(80, 72, 229, 0.25) 0%, rgba(80, 72, 229, 0) 60%),
+            radial-gradient(1000px 300px at 90% -20%, rgba(245, 208, 254, 0.15) 0%, rgba(245, 208, 254, 0) 70%);
+        }
+      }
+
+      /* ---------- Base ---------- */
+      *, *::before, *::after { box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        font-family: "Sarabun", system-ui, -apple-system, Segoe UI, Roboto, Noto Sans Thai, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      img { display: block; max-width: 100%; height: auto; }
+
+      .container {
+        width: min(1150px, 92%);
+        margin: 0 auto;
+      }
+
+      /* ---------- Header / Hero ---------- */
+      header.hero {
+        padding: 56px 0 28px;
+        background: var(--header-gradient);
+      }
+      .hero .toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+      }
+      .title-group h1 {
+        margin: 0 0 6px 0;
+        font-size: 32px;
+        letter-spacing: 0.2px;
+      }
+      .title-group p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .theme-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 40px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+        cursor: pointer;
+        transition: transform 0.2s ease, background 0.2s ease;
+      }
+      .theme-toggle:hover { transform: translateY(-1px); }
+
+      .controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .searchbar {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+      .searchbar svg {
+        position: absolute;
+        left: 14px;
+        color: var(--muted);
+      }
+      .search-input {
+        width: 100%;
+        padding: 14px 14px 14px 42px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        color: var(--text);
+        outline: none;
+        box-shadow: var(--shadow);
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      }
+      .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12); }
+
+      .chip-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .chip {
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: var(--chip-bg);
+        color: var(--chip-text);
+        font-size: 13px;
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        user-select: none;
+      }
+      .chip:hover { transform: translateY(-1px); }
+      .chip.active {
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border-color: transparent;
+      }
+
+      /* ---------- Grid ---------- */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 18px;
+        margin: 28px 0 54px;
+      }
+      @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (min-width: 960px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+      /* ---------- Card ---------- */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+      }
+      .card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12); }
+      .card-header {
+        display: flex;
+        gap: 14px;
+        padding: 16px 16px 8px 16px;
+        align-items: center;
+      }
+      .avatar {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+        overflow: hidden;
+        background: linear-gradient(135deg, #a5b4fc, #f0abfc);
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+      .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      .card-title { margin: 0; font-size: 18px; font-weight: 700; }
+      .card-subtitle { margin: 2px 0 0 0; color: var(--muted); font-size: 13px; }
+      .tags { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px 14px 16px; }
+      .tag {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        color: var(--chip-text);
+        border: 1px dashed rgba(99, 102, 241, 0.4);
+      }
+      .card-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 12px 16px 16px 16px;
+      }
+      .contact {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        border: 1px solid var(--border);
+        background: var(--surface);
+        cursor: pointer;
+        transition: transform 0.15s ease, background 0.2s ease;
+      }
+      .icon-btn:hover { transform: translateY(-1px); background: rgba(99, 102, 241, 0.08); }
+      .primary-btn {
+        padding: 10px 14px;
+        background: var(--accent);
+        color: var(--accent-contrast);
+        border: none;
+        border-radius: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.15s ease, opacity 0.2s ease;
+      }
+      .primary-btn:hover { transform: translateY(-1px); opacity: 0.96; }
+
+      .result-info { color: var(--muted); font-size: 13px; padding: 8px 2px 0 2px; }
+
+      /* ---------- Modal ---------- */
+      .modal { position: fixed; inset: 0; display: none; }
+      .modal.open { display: block; }
+      .modal .overlay {
+        position: absolute; inset: 0; background: rgba(0,0,0,0.45);
+        backdrop-filter: blur(3px);
+      }
+      .modal .dialog {
+        position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        width: min(700px, 92%);
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+        overflow: hidden;
+      }
+      .modal-header {
+        display: grid; grid-template-columns: 84px 1fr auto; gap: 16px; align-items: center;
+        padding: 18px 18px 10px 18px;
+      }
+      .avatar-lg { width: 84px; height: 84px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg, #a5b4fc, #f0abfc); display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 24px; }
+      .avatar-lg img { width: 100%; height: 100%; object-fit: cover; }
+      .modal-title { margin: 0; font-size: 22px; }
+      .modal-subtitle { margin: 6px 0 0 0; color: var(--muted); font-size: 14px; }
+      .modal-close {
+        height: 40px; width: 40px; border-radius: 50%; border: 1px solid var(--border);
+        background: var(--surface); cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+      }
+      .modal-body { padding: 8px 18px 18px 18px; }
+      .detail-list { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+      .detail-item { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px dashed var(--border); border-radius: 12px; }
+      .detail-item svg { flex: 0 0 auto; }
+      @media (max-width: 640px) { .detail-list { grid-template-columns: 1fr; } .modal-header { grid-template-columns: 64px 1fr auto; } .avatar-lg { width: 64px; height: 64px; } }
+
+      .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); border:0; }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="container">
+        <div class="toolbar">
+          <div class="title-group">
+            <h1>ทำเนียบครู</h1>
+            <p>ค้นหาและกรองรายชื่อครูตามวิชาและแผนก</p>
+          </div>
+          <button id="themeToggle" class="theme-toggle" aria-label="สลับโหมดแสง/มืด">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+        <div class="controls">
+          <div class="searchbar">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input id="searchInput" class="search-input" type="search" placeholder="ค้นหาชื่อครู วิชา หรือแผนก..." autocomplete="off" />
+          </div>
+          <div>
+            <div class="chip-row" id="subjectChips" role="listbox" aria-label="กรองตามรายวิชา"></div>
+            <div class="result-info" id="resultInfo"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <section class="grid" id="cardGrid" aria-live="polite"></section>
+      </div>
+    </main>
+
+    <div id="teacherModal" class="modal" aria-hidden="true">
+      <div class="overlay" data-close="true"></div>
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+          <div class="avatar-lg" id="modalAvatar" aria-hidden="true"></div>
+          <div>
+            <h2 id="modalTitle" class="modal-title">ชื่อครู</h2>
+            <p class="modal-subtitle" id="modalSubtitle"></p>
+          </div>
+          <button id="modalClose" class="modal-close" aria-label="ปิดรายละเอียด">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="detail-list">
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4"/><path d="M2 12h4"/><path d="M12 2v4"/><path d="M12 18v4"/><circle cx="12" cy="12" r="7"/></svg><div><div style="font-size:12px; color:var(--muted)">วิชา</div><div id="modalSubject"></div></div></div>
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 12-9 12s-9-5-9-12a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><div><div style="font-size:12px; color:var(--muted)">แผนก</div><div id="modalDepartment"></div></div></div>
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2 2 19.79 19.79 0 0 1-8.63-3.37 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 5a2 2 0 0 1 2-2h2.09a1 1 0 0 1 1 .75 12.66 12.66 0 0 0 .7 2.11 1 1 0 0 1-.23 1.09L6.91 8.09a16 16 0 0 0 6 6l1.14-1.14a1 1 0 0 1 1.09-.23 12.66 12.66 0 0 0 2.11.7 1 1 0 0 1 .75 1V19"/></svg><div><div style="font-size:12px; color:var(--muted)">โทรศัพท์</div><a id="modalPhone" href="#"></a></div></div>
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 22V9"/></svg><div><div style="font-size:12px; color:var(--muted)">ห้อง</div><div id="modalRoom"></div></div></div>
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8V7a2 2 0 0 0-2-2h-3"/><path d="M3 8V7a2 2 0 0 1 2-2h3"/><rect x="3" y="11" width="7" height="9" rx="2"/><rect x="14" y="11" width="7" height="9" rx="2"/></svg><div><div style="font-size:12px; color:var(--muted)">ประสบการณ์</div><div id="modalYears"></div></div></div>
+            <div class="detail-item"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 10h16"/><path d="M10 22V10"/></svg><div><div style="font-size:12px; color:var(--muted)">อีเมล</div><a id="modalEmail" href="#"></a></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ---------- Theme ----------
+      const rootElement = document.documentElement;
+      const themeToggleButton = document.getElementById('themeToggle');
+      const themeIcon = document.getElementById('themeIcon');
+
+      function getSystemPrefersDark() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      }
+      function applyTheme(theme) {
+        if (theme === 'dark') {
+          rootElement.setAttribute('data-theme', 'dark');
+          themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/>';
+        } else {
+          rootElement.removeAttribute('data-theme');
+          themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+        }
+      }
+      function initTheme() {
+        const saved = localStorage.getItem('theme');
+        if (saved) {
+          applyTheme(saved);
+        } else if (getSystemPrefersDark()) {
+          applyTheme('dark');
+        } else {
+          applyTheme('light');
+        }
+      }
+      themeToggleButton.addEventListener('click', () => {
+        const isDark = rootElement.getAttribute('data-theme') === 'dark';
+        const next = isDark ? 'light' : 'dark';
+        applyTheme(next);
+        localStorage.setItem('theme', next);
+      });
+
+      // ---------- Data ----------
+      const teacherData = [
+        { id: 1, name: 'ครูสมชาย แสงทอง', subject: 'คณิตศาสตร์', department: 'วิทยาศาสตร์และคณิตศาสตร์', email: 'somchai@school.ac.th', phone: '0812345678', room: 'อาคาร 3 ห้อง 301', years: 12, image: 'https://i.pravatar.cc/150?img=3' },
+        { id: 2, name: 'ครูจันทร์ฉาย ภูมิเวียง', subject: 'ภาษาไทย', department: 'กลุ่มสาระภาษาไทย', email: 'chanchaai@school.ac.th', phone: '0819876543', room: 'อาคาร 1 ห้อง 104', years: 8, image: 'https://i.pravatar.cc/150?img=48' },
+        { id: 3, name: 'ครูณัฐวดี ศรีประเสริฐ', subject: 'ภาษาอังกฤษ', department: 'ภาษาต่างประเทศ', email: 'nattawadee@school.ac.th', phone: '0894561230', room: 'อาคาร 2 ห้อง 205', years: 10, image: 'https://i.pravatar.cc/150?img=65' },
+        { id: 4, name: 'ครูวรพงศ์ จิตตะการ', subject: 'วิทยาศาสตร์', department: 'วิทยาศาสตร์และคณิตศาสตร์', email: 'vorapong@school.ac.th', phone: '0861237890', room: 'อาคาร 3 ห้องปฏิบัติการ 3', years: 15 },
+        { id: 5, name: 'ครูสิริมา พิพัฒน์ไพศาล', subject: 'สังคมศึกษา', department: 'สังคมศึกษา ศาสนา และวัฒนธรรม', email: 'sirima@school.ac.th', phone: '0823456789', room: 'อาคาร 4 ห้อง 401', years: 9, image: 'https://i.pravatar.cc/150?img=32' },
+        { id: 6, name: 'ครูณัฐกร จันทร์ธนา', subject: 'ดนตรี', department: 'ศิลปะ ดนตรี และนาฏศิลป์', email: 'nuttagorn@school.ac.th', phone: '0802221133', room: 'อาคารดนตรี ห้องซ้อม 2', years: 6 },
+        { id: 7, name: 'ครูอรพิน โชติช่วง', subject: 'ศิลปะ', department: 'ศิลปะ ดนตรี และนาฏศิลป์', email: 'orapin@school.ac.th', phone: '0891112233', room: 'อาคารศิลปะ สตูดิโอ 1', years: 7, image: 'https://i.pravatar.cc/150?img=12' },
+        { id: 8, name: 'ครูปริญญา อินทชัย', subject: 'คอมพิวเตอร์', department: 'เทคโนโลยีสารสนเทศ', email: 'parinya@school.ac.th', phone: '0869988776', room: 'อาคารคอมพิวเตอร์ ห้อง Lab A', years: 11 },
+        { id: 9, name: 'ครูชยุต พงษ์พิพัฒน์', subject: 'พลศึกษา', department: 'สุขศึกษาและพลศึกษา', email: 'chayut@school.ac.th', phone: '0835566778', room: 'สนามกีฬา กลางแจ้ง', years: 13 },
+        { id: 10, name: 'ครูสายฝน วัฒนะกุล', subject: 'แนะแนว', department: 'แนะแนวและพัฒนาผู้เรียน', email: 'saifon@school.ac.th', phone: '0851122334', room: 'อาคารแนะแนว ห้องปรึกษา', years: 14, image: 'https://i.pravatar.cc/150?img=47' },
+        { id: 11, name: 'ครูปราณี สวัสดิ์สกุล', subject: 'วิทยาศาสตร์', department: 'วิทยาศาสตร์และคณิตศาสตร์', email: 'pranee@school.ac.th', phone: '0829988776', room: 'อาคาร 3 ห้องปฏิบัติการ 1', years: 5 },
+        { id: 12, name: 'ครูเอกภพ นฤบดี', subject: 'คณิตศาสตร์', department: 'วิทยาศาสตร์และคณิตศาสตร์', email: 'akepob@school.ac.th', phone: '0817776655', room: 'อาคาร 3 ห้อง 303', years: 18 }
+      ];
+
+      // ---------- Helpers ----------
+      function getInitialsFromThaiName(name) {
+        const tokens = name.split(/\s+/).filter(Boolean);
+        if (tokens.length === 1) {
+          const first = tokens[0];
+          return first.substring(0, 2);
+        }
+        const first = tokens[0]?.[0] || '';
+        const last = tokens[1]?.[0] || '';
+        return `${first}${last}`;
+      }
+      function formatPhoneNumber(phone) {
+        const onlyDigits = (phone || '').replace(/\D/g, '');
+        if (onlyDigits.length === 10) {
+          return `${onlyDigits.slice(0, 3)}-${onlyDigits.slice(3, 6)}-${onlyDigits.slice(6)}`;
+        }
+        if (onlyDigits.length === 9) {
+          return `${onlyDigits.slice(0, 2)}-${onlyDigits.slice(2, 5)}-${onlyDigits.slice(5)}`;
+        }
+        return phone || '';
+      }
+      function normalizeText(text) {
+        return (text || '').toString().toLowerCase().trim();
+      }
+
+      // ---------- Render Chips ----------
+      const chipsContainer = document.getElementById('subjectChips');
+      const selectedSubjects = new Set();
+      function buildSubjectChips() {
+        const subjects = Array.from(new Set(teacherData.map(t => t.subject))).sort((a, b) => a.localeCompare(b, 'th'));
+        chipsContainer.innerHTML = '';
+        // Add an "ทั้งหมด" chip to clear filters
+        const allChip = createChip('ทั้งหมด', true);
+        chipsContainer.appendChild(allChip);
+        subjects.forEach(subject => chipsContainer.appendChild(createChip(subject)));
+        updateActiveChipsUI();
+      }
+      function createChip(label, isAll = false) {
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'chip';
+        chip.setAttribute('role', 'option');
+        chip.setAttribute('aria-pressed', 'false');
+        chip.textContent = label;
+        chip.addEventListener('click', () => {
+          if (isAll) {
+            selectedSubjects.clear();
+          } else {
+            if (selectedSubjects.has(label)) {
+              selectedSubjects.delete(label);
+            } else {
+              selectedSubjects.add(label);
+            }
+          }
+          updateActiveChipsUI();
+          renderTeachers();
+        });
+        return chip;
+      }
+      function updateActiveChipsUI() {
+        const allChips = Array.from(chipsContainer.querySelectorAll('.chip'));
+        allChips.forEach(ch => {
+          const label = ch.textContent?.trim();
+          const isAll = label === 'ทั้งหมด';
+          const active = isAll ? selectedSubjects.size === 0 : selectedSubjects.has(label);
+          ch.classList.toggle('active', active);
+          ch.setAttribute('aria-pressed', String(active));
+        });
+      }
+
+      // ---------- Render Cards ----------
+      const grid = document.getElementById('cardGrid');
+      const searchInput = document.getElementById('searchInput');
+      const resultInfo = document.getElementById('resultInfo');
+
+      function renderTeachers() {
+        const query = normalizeText(searchInput.value);
+        const filtered = teacherData.filter(t => {
+          const hay = `${t.name} ${t.subject} ${t.department}`.toLowerCase();
+          const matchesQuery = !query || hay.includes(query);
+          const matchesSubject = selectedSubjects.size === 0 || selectedSubjects.has(t.subject);
+          return matchesQuery && matchesSubject;
+        });
+
+        grid.innerHTML = '';
+        resultInfo.textContent = `พบทั้งหมด ${filtered.length} รายการ`;
+
+        filtered.forEach(t => grid.appendChild(createTeacherCard(t)));
+      }
+
+      function createTeacherCard(teacher) {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.setAttribute('data-id', String(teacher.id));
+
+        const header = document.createElement('div');
+        header.className = 'card-header';
+
+        const avatar = document.createElement('div');
+        avatar.className = 'avatar';
+        if (teacher.image) {
+          const img = document.createElement('img');
+          img.src = teacher.image;
+          img.alt = teacher.name;
+          img.loading = 'lazy';
+          img.referrerPolicy = 'no-referrer';
+          img.onerror = () => {
+            avatar.innerHTML = `<span>${getInitialsFromThaiName(teacher.name)}</span>`;
+          };
+          avatar.appendChild(img);
+        } else {
+          avatar.innerHTML = `<span>${getInitialsFromThaiName(teacher.name)}</span>`;
+        }
+
+        const textGroup = document.createElement('div');
+        const title = document.createElement('h3');
+        title.className = 'card-title';
+        title.textContent = teacher.name;
+        const subtitle = document.createElement('p');
+        subtitle.className = 'card-subtitle';
+        subtitle.textContent = `${teacher.subject} · ${teacher.department}`;
+        textGroup.appendChild(title);
+        textGroup.appendChild(subtitle);
+
+        header.appendChild(avatar);
+        header.appendChild(textGroup);
+
+        const tags = document.createElement('div');
+        tags.className = 'tags';
+        const tag1 = document.createElement('span');
+        tag1.className = 'tag';
+        tag1.textContent = teacher.room;
+        const tag2 = document.createElement('span');
+        tag2.className = 'tag';
+        tag2.textContent = `ประสบการณ์ ${teacher.years} ปี`;
+        tags.appendChild(tag1);
+        tags.appendChild(tag2);
+
+        const footer = document.createElement('div');
+        footer.className = 'card-footer';
+        const contact = document.createElement('div');
+        contact.className = 'contact';
+        const mailBtn = document.createElement('a');
+        mailBtn.className = 'icon-btn';
+        mailBtn.href = `mailto:${teacher.email}`;
+        mailBtn.setAttribute('aria-label', `ส่งอีเมลถึง ${teacher.name}`);
+        mailBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><polyline points="22,6 12,13 2,6"></polyline></svg>';
+        const phoneBtn = document.createElement('a');
+        phoneBtn.className = 'icon-btn';
+        phoneBtn.href = `tel:${teacher.phone}`;
+        phoneBtn.setAttribute('aria-label', `โทรหา ${teacher.name}`);
+        phoneBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92V19a2 2 0 0 1-2 2 19.79 19.79 0 0 1-8.63-3.37 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2 5a2 2 0 0 1 2-2h2.09a1 1 0 0 1 1 .75 12.66 12.66 0 0 0 .7 2.11 1 1 0 0 1-.23 1.09L6.91 8.09a16 16 0 0 0 6 6l1.14-1.14a1 1 0 0 1 1.09-.23 12.66 12.66 0 0 0 2.11.7 1 1 0 0 1 .75 1V19"/></svg>';
+        contact.appendChild(mailBtn);
+        contact.appendChild(phoneBtn);
+
+        const detailBtn = document.createElement('button');
+        detailBtn.className = 'primary-btn';
+        detailBtn.textContent = 'ดูรายละเอียด';
+        detailBtn.addEventListener('click', () => openTeacherModal(teacher));
+
+        footer.appendChild(contact);
+        footer.appendChild(detailBtn);
+
+        card.appendChild(header);
+        card.appendChild(tags);
+        card.appendChild(footer);
+        return card;
+      }
+
+      // ---------- Modal ----------
+      const modal = document.getElementById('teacherModal');
+      const modalClose = document.getElementById('modalClose');
+      const modalAvatar = document.getElementById('modalAvatar');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalSubject = document.getElementById('modalSubject');
+      const modalDepartment = document.getElementById('modalDepartment');
+      const modalPhone = document.getElementById('modalPhone');
+      const modalEmail = document.getElementById('modalEmail');
+      const modalRoom = document.getElementById('modalRoom');
+      const modalYears = document.getElementById('modalYears');
+
+      let lastFocusedElement = null;
+      function openTeacherModal(t) {
+        lastFocusedElement = document.activeElement;
+        modalAvatar.innerHTML = '';
+        if (t.image) {
+          const img = document.createElement('img');
+          img.src = t.image;
+          img.alt = t.name;
+          img.referrerPolicy = 'no-referrer';
+          img.onerror = () => { modalAvatar.textContent = getInitialsFromThaiName(t.name); };
+          modalAvatar.appendChild(img);
+        } else {
+          modalAvatar.textContent = getInitialsFromThaiName(t.name);
+        }
+        modalTitle.textContent = t.name;
+        modalSubtitle.textContent = `${t.subject} · ${t.department}`;
+        modalSubject.textContent = t.subject;
+        modalDepartment.textContent = t.department;
+        modalPhone.textContent = formatPhoneNumber(t.phone);
+        modalPhone.href = `tel:${t.phone}`;
+        modalEmail.textContent = t.email;
+        modalEmail.href = `mailto:${t.email}`;
+        modalRoom.textContent = t.room;
+        modalYears.textContent = `${t.years} ปี`;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        modalClose.focus();
+      }
+      function closeTeacherModal() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        if (lastFocusedElement) {
+          lastFocusedElement.focus();
+          lastFocusedElement = null;
+        }
+      }
+      modal.addEventListener('click', (e) => {
+        const target = e.target;
+        if (target && (target.dataset.close === 'true')) {
+          closeTeacherModal();
+        }
+      });
+      modalClose.addEventListener('click', closeTeacherModal);
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeTeacherModal();
+      });
+
+      // ---------- Events ----------
+      searchInput.addEventListener('input', renderTeachers);
+
+      // ---------- Init ----------
+      initTheme();
+      buildSubjectChips();
+      renderTeachers();
+    </script>
+  </body>
+</html>
+
